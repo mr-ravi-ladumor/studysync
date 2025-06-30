@@ -1,9 +1,16 @@
 import Router from 'express';
-import { userSignup } from '../controllers/user.controllers.js';
+import verifyAuthToken from '../middlewares/auth.middleware.js';
+import { 
+    userRegister,
+    userLogin,
+    userLogout,
+ } from '../controllers/user.controllers.js';
 
 const router = Router();
 
 
-router.route('/signup').get(userSignup);
+router.route('/signup').post(userRegister);
+router.route('/login').post(userLogin);
+router.route('/logout').get(verifyAuthToken, userLogout);
 
 export default router;
