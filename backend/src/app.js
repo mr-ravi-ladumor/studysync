@@ -14,4 +14,12 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+//import routes
+import userRoutes from './routes/user.routes.js';
+app.use('/api', userRoutes);
+
+
+// global error handler middleware
+import errorHandler from './middlewares/errorHandler.middleware.js';
+app.use(errorHandler);
 export default app;
