@@ -63,7 +63,7 @@ const userLogin = asyncHandler(async (req, res) => {
         throw new ApiError(401, 'User Account does not exist with this email');
     }
 
-    const isPasswordMatched = user.isPasswordCorrect(password);
+    const isPasswordMatched = await user.isPasswordCorrect(password);
 
     if (!isPasswordMatched){
         throw new ApiError(401, 'Invalid password');
@@ -111,15 +111,13 @@ const userLogout = asyncHandler(async (req,res) => {
 
     return res
     .status(200)
-    .cookie("refreshToken", options)
-    .cookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", options)
     .json(
         new ApiResponse(200, "", 'User Account logged out successfully')
     )
     
 })
-
-
 
 export {
     userRegister,

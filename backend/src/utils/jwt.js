@@ -9,6 +9,7 @@ const generateJwtTokens = async(user) => {
 
     user.refreshToken = refreshToken;
     await user.save({validateBeforeSave: false});
+    return {accessToken, refreshToken};
 }
 
 export {generateJwtTokens};

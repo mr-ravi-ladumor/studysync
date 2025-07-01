@@ -3,6 +3,7 @@ class ApiError extends Error {
     constructor(statusCode = 500, message = 'Something went wrong !', data = null){
         super(message);
         this.statusCode = statusCode;
+        this.success = false;
         this.message = message;
         this.data = data;
 
