@@ -16,8 +16,10 @@ app.use(cookieParser());
 
 //import routes
 import userRoutes from './routes/user.routes.js';
-app.use('/api/user', userRoutes);
+import taskRoutes from './routes/task.routes.js';
 
+app.use('/api/user', userRoutes);
+app.use('/api/task', taskRoutes);
 
 // global error handler middleware
 import errorHandler from './middlewares/errorHandler.middleware.js';
