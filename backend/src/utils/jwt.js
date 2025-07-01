@@ -1,4 +1,4 @@
-import ApiError from '../errors/ApiError.js';
+import ApiError from './ApiError.js';
 const generateJwtTokens = async(user) => {
     //console.log('Generating JWT for user:', user.email);
     if (!user || !user._id) {

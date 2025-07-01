@@ -1,7 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
-import User from '../models/user.model.js';
 import ApiResponse from '../utils/ApiResponse.js';
+import {User} from '../models/user.model.js';
 import { generateJwtTokens } from '../utils/jwt.js';
 
 const userRegister = asyncHandler(async (req, res) => {
@@ -25,17 +25,22 @@ const userRegister = asyncHandler(async (req, res) => {
         throw new ApiError(400, 'User Account already exists with this email');
     }
 
-    const user = await User.create({
+    const createdUser = await User.create({
         email: email.trim().toLowerCase(),
         firstname : firstname.trim(),
         lastname : lastname.trim(),
         password,
-    }).select('-password -refreshToken');
+    })
 
-    if (!user){
+    
+    if (!createdUser){
         throw new ApiError(500, 'User Account creation failed');
     }
 
+    const user = createdUser.toObject();
+    
+    delete user.password;
+    delete user.refreshToken;
     res.status(200).json(
        new ApiResponse(200, user, 'User Account created successfully')
     )
@@ -69,7 +74,7 @@ const userLogin = asyncHandler(async (req, res) => {
         throw new ApiError(401, 'Invalid password');
     }
 
-    const {accessToken, refreshToken} = generateJwtTokens(user);
+    const {accessToken, refreshToken} = await generateJwtTokens(user);
 
     const loggedInUser = await User.findById(user._id).select('-password -refreshToken');
 

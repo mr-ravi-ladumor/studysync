@@ -1,5 +1,5 @@
 import Router from 'express';
-import verifyAuthToken from '../middlewares/auth.middleware.js';
+import {verifyAuthToken} from '../middlewares/auth.middleware.js';
 import { 
     userRegister,
     userLogin,
@@ -11,6 +11,6 @@ const router = Router();
 
 router.route('/signup').post(userRegister);
 router.route('/login').post(userLogin);
-router.route('/logout').get(verifyAuthToken, userLogout);
+router.route('/logout').post(verifyAuthToken, userLogout);
 
 export default router;

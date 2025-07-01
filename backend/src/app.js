@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 //import routes
 import userRoutes from './routes/user.routes.js';
-app.use('/api', userRoutes);
+app.use('/api/user', userRoutes);
 
 
 // global error handler middleware
