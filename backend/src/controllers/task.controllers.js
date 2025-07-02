@@ -1,7 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
-import {Task} from '../models/Task.js';
+import {Task} from '../models/task.model.js';
 
 
 // Get All Tasks
@@ -10,8 +10,7 @@ const getAllTasks = asyncHandler(async(req,res) => {
     if (!req.user) {
         throw new ApiError(401, 'Unauthorized access to Tasks resource');
     }
-    const tasks = await Task.find({user: req.user._id}).sort({createdAt: -1});
-    console.log('get tasks', tasks);
+    const tasks = await Task.find({owner: req.user._id}).sort({createdAt: -1});
 
     if (!tasks || tasks.length === 0){
         throw new ApiError(404, 'No tasks found');
@@ -36,7 +35,6 @@ const getTaskById = asyncHandler(async(req, res) => {
     }
     const userId = req.user._id;
 
-    
     const task = await Task.findOne({
         _id: taskId,
         owner: userId
@@ -78,8 +76,61 @@ const createTask = asyncHandler(async (req,res) => {
     );
 })
 
+// Update Task
+const updateTask = asyncHandler(async (req, res) => {
+    const taskId = req.params.taskId;
+    const {title, description, status} = req.body;
+
+    if (!taskId) {
+        throw new ApiError(400, 'Task ID is required');
+    }
+    if (!req.user) {
+        throw new ApiError(401, 'Unauthorized access to update Task');
+    }
+    const userId = req.user._id;
+    const task = await Task.findOneAndUpdate(
+        {_id: taskId, owner: userId},
+        {title, description, status},
+        {new: true, runValidators: true}
+    );
+
+    if (!task) {
+        throw new ApiError(404, 'Task not found or you do not have permission to update it');
+    }
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, task, 'Task updated successfully')
+    );
+});
+
+// Delete Task
+const deleteTask = asyncHandler(async (req, res) => {
+    const taskId = req.params.taskId;
+    if (!taskId) {
+        throw new ApiError(400, 'Task ID is required');
+    }
+    if (!req.user) {
+        throw new ApiError(401, 'Unauthorized access to delete Task');
+    }
+    const userId = req.user._id;
+    const task = await Task.findOneAndDelete(
+        {_id: taskId, owner: userId}
+    );
+    if (!task) {
+        throw new ApiError(404, 'Task not found or you do not have permission to delete it');
+    }
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, task, 'Task deleted successfully')
+    );
+});
+
 export {
     getAllTasks,
     getTaskById,
     createTask,
+    updateTask,
+    deleteTask,
 }

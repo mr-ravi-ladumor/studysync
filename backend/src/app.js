@@ -19,7 +19,7 @@ import userRoutes from './routes/user.routes.js';
 import taskRoutes from './routes/task.routes.js';
 
 app.use('/api/user', userRoutes);
-app.use('/api/task', taskRoutes);
+app.use('/api/tasks', taskRoutes);
 
 // global error handler middleware
 import errorHandler from './middlewares/errorHandler.middleware.js';
