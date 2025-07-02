@@ -120,12 +120,107 @@ const userLogout = asyncHandler(async (req,res) => {
     .clearCookie("accessToken", options)
     .json(
         new ApiResponse(200, "", 'User Account logged out successfully')
-    )
+    )  
+})
+
+const updateUserData = asyncHandler(async (req, res) => {
     
+    const { firstname, lastname, email } = req.body;
+    const updateObj = {};
+    if (firstname !== undefined && firstname !== null && firstname.trim() !== "") {
+        updateObj.firstname = firstname.trim();
+    } else if (firstname.trim() === "") {
+        throw new ApiError(400, "Firstname cannot be empty");
+    }
+
+    if (lastname !== undefined) updateObj.lastname = lastname.trim();
+
+    if (email !== undefined && email !== null && email.trim() !== "") {
+        updateObj.email = email;
+    } else if (email.trim() === "") {
+        throw new ApiError(400, "Email cannot be empty");
+    }
+
+    if(Object.keys(updateObj).length() === 0){
+        throw new ApiError(400, 'No valid provided to update');
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        updateObj,
+        { new: true, runValidators: true }
+    ).select('-password -refreshToken');
+
+    if (!updatedUser) {
+        throw new ApiError(500, 'User data update failed');
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, updatedUser, 'User data updated successfully')
+    )
+})
+
+const changePassword = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword, conformPassword} = req.body;
+
+    if (!oldPassword || !newPassword || !conformPassword) {
+        throw new ApiError(400, 'Please provide all required fields');
+    }
+
+    if (newPassword !== conformPassword) {
+        throw new ApiError(401, 'New password and confirm password do not match');
+    }
+    
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    const isPasswordMatched = await user.isPasswordCorrect(oldPassword);
+
+    if (!isPasswordMatched) {
+        throw new ApiError(401, 'Old password is incorrect');
+    }
+
+    user.password = newPassword;
+    const updatedUser = await user.save();
+
+    if (!updatedUser) {
+        throw new ApiError(500, 'Password change failed');
+    }
+    const userObj = updatedUser.toObject();
+    delete userObj.password;
+    delete userObj.refreshToken;
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, userObj, 'Password changed successfully')
+    )
+})
+
+const deleteUser = asyncHandler(async(req,res) => {
+    const userId = req.user._id;
+
+    const user = await User.findOneAndDelete(
+        {_id: userId}
+    );
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, user, 'User deleted successfully')
+    );
 })
 
 export {
     userRegister,
     userLogin,
-    userLogout
+    userLogout,
+    updateUserData,
+    changePassword,
+    deleteUser
 }

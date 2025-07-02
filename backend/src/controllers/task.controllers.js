@@ -6,10 +6,7 @@ import {Task} from '../models/task.model.js';
 
 // Get All Tasks
 const getAllTasks = asyncHandler(async(req,res) => {
-
-    if (!req.user) {
-        throw new ApiError(401, 'Unauthorized access to Tasks resource');
-    }
+    
     const tasks = await Task.find({owner: req.user._id}).sort({createdAt: -1});
 
     if (!tasks || tasks.length === 0){
@@ -30,9 +27,6 @@ const getTaskById = asyncHandler(async(req, res) => {
         throw new ApiError(400, 'Task ID is required');
     }
 
-    if (!req.user) {
-        throw new ApiError(401, 'Unauthorized access to Task resource');
-    }
     const userId = req.user._id;
 
     const task = await Task.findOne({
@@ -84,9 +78,6 @@ const updateTask = asyncHandler(async (req, res) => {
     if (!taskId) {
         throw new ApiError(400, 'Task ID is required');
     }
-    if (!req.user) {
-        throw new ApiError(401, 'Unauthorized access to update Task');
-    }
     const userId = req.user._id;
     const task = await Task.findOneAndUpdate(
         {_id: taskId, owner: userId},
@@ -110,9 +101,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     if (!taskId) {
         throw new ApiError(400, 'Task ID is required');
     }
-    if (!req.user) {
-        throw new ApiError(401, 'Unauthorized access to delete Task');
-    }
+
     const userId = req.user._id;
     const task = await Task.findOneAndDelete(
         {_id: taskId, owner: userId}
