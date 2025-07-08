@@ -141,7 +141,7 @@ const updateUserData = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Email cannot be empty");
     }
 
-    if(Object.keys(updateObj).length() === 0){
+    if(Object.keys(updateObj).length === 0){
         throw new ApiError(400, 'No valid provided to update');
     }
 

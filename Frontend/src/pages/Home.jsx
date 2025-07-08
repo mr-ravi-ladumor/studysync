@@ -86,7 +86,7 @@ function Home() {
           Sign up now and take control of your productivity and learning
           journey.
         </p>
-        <Link to="/login">
+        <Link to="/signup">
           <button className="bg-white text-blue-700 hover:bg-blue-100 text-lg px-10 py-3 rounded-full font-semibold shadow-lg transition">
             Join StudySync
           </button>
