@@ -1,5 +1,2 @@
 # 📚 StudySync
 Full stack App 
-
-
-
