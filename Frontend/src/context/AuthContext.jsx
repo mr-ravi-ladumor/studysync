@@ -3,29 +3,29 @@ import React, { createContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        console.log("useAuth :: AuthProvider useEffect called");
+        // console.log("useAuth :: AuthProvider useEffect called");
         try {
             const authUser = localStorage.getItem('user');
-            console.log("authUser", authUser)
+            // console.log("authUser", authUser)
             if(authUser) {
-                console.log("object")
+                // console.log("object")
                 const userData = JSON.parse(authUser);
                 setIsAuthenticated(true);
                 setUser(userData);
             }
             else {
-                setUser(null);
+                setUser('');
                 setIsAuthenticated(false);
             }
         } catch (error) {
             console.log("Error retrieving user from localStorage:", error);
-            setUser(null);
+            setUser('');
             setIsAuthenticated(false);
             localStorage.removeItem('user');
         }
@@ -39,7 +39,7 @@ export const AuthProvider = ({children}) => {
     }
 
     const logout = async (userData) => {
-        setUser(null);
+        setUser('');
         setIsAuthenticated(false);
         setError(false);
         localStorage.removeItem('user');   
