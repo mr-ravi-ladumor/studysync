@@ -6,6 +6,7 @@ import {
     BookOpenIcon,
     LayoutDashboardIcon,
     CircleUser,
+    Settings
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
@@ -25,6 +26,11 @@ const sidebarData = [
     icon: <CalendarIcon className="h-5 w-5"/>,
     path: "/calendar",
   },
+  {
+    name: "Settings",
+    icon: <Settings className="h-5 w-5"/>,
+    path: "/settings",
+  }
 ];
 
 function Sidebar() {

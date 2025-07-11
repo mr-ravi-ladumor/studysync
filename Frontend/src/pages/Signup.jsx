@@ -92,7 +92,7 @@ function Signup() {
                     if (response.ok) {
                         const userData = await response.json();
                         console.log("Signup successful:", userData);
-                        login(userData);
+                        login(userData.data.user);
                         navigate('/dashboard');
                     }
                     else {

@@ -42,7 +42,6 @@ function Dashboard() {
   if (!user) {
     return <p>Please log in to access the dashboard.</p>;
   }
-  //   console.log(user);
   return (
     <div className="h-screen flex flex-col gap-5 ">
       <div className="flex justify-between items-center">
@@ -80,7 +79,6 @@ function Dashboard() {
               </div>
               <div>
                 {/* Progress bar */}
-                {console.log(card.color)}
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div
                     className={`bg-${card.color} h-3 rounded-full`}
@@ -102,6 +100,3 @@ function Dashboard() {
 
 export default Dashboard;
 
-{
-  /* Card for Total Tasks */
-}

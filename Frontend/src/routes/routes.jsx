@@ -12,18 +12,22 @@ import Signup from "../pages/Signup.jsx";
 import Layout from "../components/layout/Layout.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import Resources from "../pages/Resources.jsx";
+import Calendar from "../pages/Calendar.jsx";
+import Settings from "../pages/Settings.jsx";
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
         <Route path="/" element={<Home/>} />
-        <Route path="/login" element={<Login/>} />
+        <Route path="/login"  element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
 
         <Route path="/" element={<Layout/>} >
           <Route path="dashboard" element={<Dashboard/>} />
           <Route path="resources" element={<Resources/>} />
+          <Route path="calendar"  element={<Calendar/>} />
+          <Route path="settings"  element={<Settings/>} />
         </Route>
     </Route>
 
