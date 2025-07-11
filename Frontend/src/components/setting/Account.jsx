@@ -93,7 +93,7 @@ function Account() {
           <div className="w-1/2">
             <label
               htmlFor="firstname"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               First Name
             </label>
@@ -109,7 +109,7 @@ function Account() {
           <div className="w-1/2">
             <label
               htmlFor="lastname"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Last Name
             </label>
@@ -129,7 +129,7 @@ function Account() {
           {" "}
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-md font-medium text-gray-700 mb-2"
           >
             Email Address
           </label>
@@ -148,7 +148,7 @@ function Account() {
           {" "}
           <label
             htmlFor="bio"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-md font-medium text-gray-700 mb-2"
           >
             Bio
           </label>
@@ -162,7 +162,7 @@ function Account() {
             placeholder="Computer Science student at University of Technology. Passionate about web development and machine learning."
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
           />
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-md text-gray-500 mt-1">
             Brief description for your profile. Max 200 characters.
           </p>
         </div>
@@ -186,10 +186,10 @@ function Account() {
         <div className="space-y-4">
           <div className="flex justify-between items-center py-3 border-b border-gray-100">
             <div>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-md font-medium text-gray-900">
                 Account Status
               </p>
-              <p className="text-sm text-gray-500">Your account is active</p>
+              <p className="text-md text-gray-500">Your account is active</p>
             </div>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
               Active
@@ -197,8 +197,8 @@ function Account() {
           </div>
           <div className="flex justify-between items-center py-3 border-b border-gray-100">
             <div>
-              <p className="text-sm font-medium text-gray-900">Member Since</p>
-              <p className="text-sm text-gray-500">January 2024</p>
+              <p className="text-md font-medium text-gray-900">Member Since</p>
+              <p className="text-md text-gray-500">January 2024</p>
             </div>
           </div>
           {/* delete account */}

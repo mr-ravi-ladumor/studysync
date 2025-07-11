@@ -163,13 +163,13 @@ const updateUserData = asyncHandler(async (req, res) => {
 })
 
 const changePassword = asyncHandler(async (req, res) => {
-    const { oldPassword, newPassword, conformPassword} = req.body;
+    const { oldPassword, newPassword, confirmPassword} = req.body;
 
-    if (!oldPassword || !newPassword || !conformPassword) {
+    if (!oldPassword || !newPassword || !confirmPassword) {
         throw new ApiError(400, 'Please provide all required fields');
     }
 
-    if (newPassword !== conformPassword) {
+    if (newPassword !== confirmPassword) {
         throw new ApiError(401, 'New password and confirm password do not match');
     }
     

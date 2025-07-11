@@ -10,7 +10,7 @@ function SettingsNav({active, setActive}) {
   ];
   return (
     <div>
-      <ul className="w-64 bg-gray-50 rounded-lg flex flex-col">
+      <ul className="w-64 bg-white rounded-lg flex flex-col">
         {options.map((option) => (
           <li key={option.key}>
             <button

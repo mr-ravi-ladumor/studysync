@@ -1,6 +1,7 @@
 import React , {useState} from "react";
 import SettingsNav from "../components/setting/SettingsNav.jsx";
 import Account from "../components/setting/Account.jsx";
+import Password from "../components/setting/Password.jsx";
 
 function Settings() {
     const [active, setActive] = useState("Account");
@@ -20,6 +21,7 @@ function Settings() {
             </div>
             <div className="settingPage flex-1">
                 {active === "Account" && <Account />}
+                {active === "Change Password" && <Password/>}
             </div>
         </div>
         </div>
