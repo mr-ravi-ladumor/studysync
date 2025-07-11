@@ -9,7 +9,7 @@ function SettingsNav({active, setActive}) {
     { key: 4, value: "Notifications" },
   ];
   return (
-    <div>
+    <div className="sticky top-1">
       <ul className="w-64 bg-white rounded-lg flex flex-col">
         {options.map((option) => (
           <li key={option.key}>
