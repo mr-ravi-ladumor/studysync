@@ -1,6 +1,41 @@
-import React from "react";
+import React, {useState} from "react";
 
-function AddTask({ onSubmitAddTask, setShowAddTask }) {
+function AddTask({ setShowAddTask }) {
+    const [task, setTask] = useState({
+        title: "",
+        description: "",
+    });
+
+
+  const onSubmitAddTask = async(e) => {
+    e.preventDefault();
+
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks/addTask`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(task),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || "Failed to add task");
+        }
+        console.log("Task added successfully:", data);
+        setTask({
+            title: "",
+            description: "",
+        });
+        setShowAddTask(false);
+        alert("Task added successfully!");
+    } catch (error) {
+        console.error("Error adding task:", error);
+        alert("Failed to add task. Please try again.");
+    }
+  };
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
@@ -16,6 +51,9 @@ function AddTask({ onSubmitAddTask, setShowAddTask }) {
               </label>
               <input
                 type="text"
+                name="taskTitle"
+                value={task.title}
+                onChange={(e) => setTask({ ...task, title: e.target.value })}
                 placeholder="Enter Task Title..."
                 required
                 className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -26,6 +64,12 @@ function AddTask({ onSubmitAddTask, setShowAddTask }) {
                 Task Description
               </label>
               <textarea
+                name="taskDescription"
+                rows="4"
+                value={task.description}
+                onChange={(e) =>
+                  setTask({ ...task, description: e.target.value })
+                }
                 placeholder="Enter Task Description..."
                 className="w-full mb-4 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 "
               />

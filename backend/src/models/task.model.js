@@ -16,7 +16,7 @@ const taskSchema = new Schema(
         },
         status : {
             type : String,
-            enum: ['pending', 'completed'],
+            enum: ['pending', 'completed', 'in-progress', 'overdue'],
             default: 'pending'
         },
         // *due date
