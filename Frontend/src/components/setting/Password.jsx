@@ -23,10 +23,49 @@ function Password() {
     }))
   };
 
-  const onSubmitChangPassword = async (e) => {
+  const onSubmitChangePassword = async (e) => {
     e.preventDefault();
     
-    console.log("Form submitted with data:", formData);
+    try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/changePassword`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            currentPassword: formData.currentPassword,
+            newPassword: formData.newPassword,
+            confirmPassword: formData.confirmPassword,
+        }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Failed to change password");
+    }
+
+    console.log("Password changed successfully:", data);
+
+    setFormData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+    });
+    setShowPassword({
+        current: true,
+        new: true,
+        confirm: true,
+    });
+
+    alert("Password changed successfully");
+
+} catch (error) {
+    console.error("Error changing password:", error);
+    alert(`Error: ${error.message}`);
+}
+
   };
   return (
     <div className="bg-white p-6 rounded-lg">
@@ -149,7 +188,7 @@ function Password() {
         </div>
         <div className="flex justify-end">
           <button
-            onClick={onSubmitChangPassword}
+            onClick={onSubmitChangePassword}
             className="bg-green-500 hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200"
           >
             Change Password

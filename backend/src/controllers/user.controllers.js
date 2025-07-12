@@ -163,15 +163,12 @@ const updateUserData = asyncHandler(async (req, res) => {
 })
 
 const changePassword = asyncHandler(async (req, res) => {
-    const { oldPassword, newPassword, confirmPassword} = req.body;
+    const { currentPassword, newPassword, confirmPassword} = req.body;
 
-    if (!oldPassword || !newPassword || !confirmPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
         throw new ApiError(400, 'Please provide all required fields');
     }
 
-    if (newPassword !== confirmPassword) {
-        throw new ApiError(401, 'New password and confirm password do not match');
-    }
     
     const user = await User.findById(req.user._id);
 
@@ -179,10 +176,13 @@ const changePassword = asyncHandler(async (req, res) => {
         throw new ApiError(404, 'User not found');
     }
 
-    const isPasswordMatched = await user.isPasswordCorrect(oldPassword);
+    const isPasswordMatched = await user.isPasswordCorrect(currentPassword);
 
     if (!isPasswordMatched) {
         throw new ApiError(401, 'Old password is incorrect');
+    }
+    if (newPassword !== confirmPassword) {
+        throw new ApiError(401, 'New password and confirm password do not match');
     }
 
     user.password = newPassword;
