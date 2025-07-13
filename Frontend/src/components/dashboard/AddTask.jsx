@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function AddTask({ setShowAddTask }) {
+function AddTask({setTasks, setShowAddTask }) {
     const [task, setTask] = useState({
         title: "",
         description: "",
@@ -20,17 +20,20 @@ function AddTask({ setShowAddTask }) {
             body: JSON.stringify(task),
         });
 
-        const data = await response.json();
+        const addedTask = await response.json();
         if (!response.ok) {
-            throw new Error(data.message || "Failed to add task");
+            throw new Error(addedTask.message || "Failed to add task");
         }
-        console.log("Task added successfully:", data);
+        console.log("Task added successfully:", addedTask);
+
+        setTasks((prevTasks) => [...prevTasks, addedTask.data])
+
         setTask({
             title: "",
             description: "",
         });
         setShowAddTask(false);
-        alert("Task added successfully!");
+        // alert("Task added successfully!");
     } catch (error) {
         console.error("Error adding task:", error);
         alert("Failed to add task. Please try again.");

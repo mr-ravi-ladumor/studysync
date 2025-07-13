@@ -9,7 +9,7 @@ const getAllTasks = asyncHandler(async(req,res) => {
     
     const tasks = await Task.find({owner: req.user._id}).sort({createdAt: -1});
 
-    if (!tasks || tasks.length === 0){
+    if (!tasks){
         throw new ApiError(404, 'No tasks found');
     }
 

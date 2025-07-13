@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import UpdateTask from "./UpdateTask.jsx";
 import DeleteTask from "./DeleteTask.jsx";
 
-function TaskList() {
+function TaskList({tasks, setTasks}) {
   console.log("tasklist");
-  const [tasks, setTasks] = useState([]);
   const [showUpdateTask, setShowUpdateTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [showDeleteTask, setShowDeleteTask] = useState(false);
@@ -27,11 +26,13 @@ function TaskList() {
         setTasks(allTasksData.data);
         // console.log("Tasks fetched successfully:", allTasksData.data);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        // console.error("Error fetching tasks:", error);
       }
     };
     fetchTasks();
   }, []);
+
+  useEffect
 
   return (
     <>

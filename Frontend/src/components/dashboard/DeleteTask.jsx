@@ -20,7 +20,7 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
 
       const deleteTask = await response.json();
       if (!response.ok) {
-        throw new Error(deleteTask.message || "Failed to Update task");
+        throw new Error(deleteTask.message || "Failed to Deleted task");
       }
       
 
@@ -32,10 +32,10 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
         )
     );
 
-      alert("Task Updated successfully!");
+      alert("Task Deleted successfully!");
     } catch (error) {
-      console.error("Error Updating task:", error);
-      alert("Failed to Update task. Please try again.");
+      console.error("Error Deleted task:", error);
+      alert("Failed to Deleted task. Please try again.");
     }
   };
   return (

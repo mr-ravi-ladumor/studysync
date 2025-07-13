@@ -7,7 +7,7 @@ import TaskList from "../components/dashboard/TaskList.jsx";
 function Dashboard() {
   const { user } = useAuth();
   const [showAddTask, setShowAddTask] = useState(false);
-  
+  const [tasks, setTasks] = useState([]);
 
   if (!user) {
     return <p>Please log in to access the dashboard.</p>;
@@ -31,6 +31,7 @@ function Dashboard() {
         </button>
         {showAddTask && (
           <AddTask
+            setTasks={setTasks}
             setShowAddTask={setShowAddTask}
           />
         )}
@@ -40,7 +41,7 @@ function Dashboard() {
             <StatusCards />
         </section>
         <div className="task-section mt-8">
-            <TaskList />
+            <TaskList tasks={tasks} setTasks={setTasks}/>
         </div>
         
       </main>
