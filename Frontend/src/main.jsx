@@ -6,11 +6,11 @@ import router from "./routes/routes.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+//   <StrictMode>
     <AuthProvider>
         <RouterProvider router={router}> </RouterProvider>
     </AuthProvider>
-  </StrictMode>
+//   </StrictMode>
 );
 
 

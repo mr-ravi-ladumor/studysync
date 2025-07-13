@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import UpdateTask from "./UpdateTask.jsx";
+import DeleteTask from "./DeleteTask.jsx";
 
 function TaskList() {
-console.log("tasklist")
+  console.log("tasklist");
   const [tasks, setTasks] = useState([]);
   const [showUpdateTask, setShowUpdateTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [showDeleteTask, setShowDeleteTask] = useState(false);
 
   useEffect(() => {
     // Fetch tasks from the backend when the component mounts
@@ -66,7 +68,12 @@ console.log("tasklist")
                 >
                   Edit
                 </button>
-                <button className="text-red-600 text-sm md:text-base">
+                <button 
+                  onClick={() => {
+                    setSelectedTask(task);
+                    setShowDeleteTask(true);
+                  }}
+                  className="text-red-600 text-sm md:text-base">
                   Delete
                 </button>
               </div>
@@ -74,13 +81,22 @@ console.log("tasklist")
           ))
         )}
       </div>
-      {/* Render UpdateTask modal only once, outside the map */}
+      {/* Update Task Modal */}
       {showUpdateTask && selectedTask && (
         <UpdateTask
           taskData={selectedTask}
           setTasks={setTasks}
           setSelectedTask={setSelectedTask}
           setShowUpdateTask={setShowUpdateTask}
+        />
+      )}
+      {/* delete */}
+      {showDeleteTask && (
+        <DeleteTask 
+            taskId={selectedTask?._id}
+            setTasks={setTasks}
+            setSelectedTask={setSelectedTask}
+            setShowDeleteTask={setShowDeleteTask}
         />
       )}
     </>
