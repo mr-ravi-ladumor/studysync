@@ -37,10 +37,10 @@ function Dashboard() {
       </div>
       <main>
         <section className="cards flex  items-center gap-3">
-          <StatusCards />
+            <StatusCards />
         </section>
         <div className="task-section mt-8">
-            <TaskList/>
+            <TaskList />
         </div>
         
       </main>
