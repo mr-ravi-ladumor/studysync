@@ -1,6 +1,6 @@
 import ApiError from './ApiError.js';
 
-const allowedExtensions = [
+export const allowedExtensions = [
   "pdf",
   "doc",
   "docx",
@@ -14,7 +14,7 @@ const allowedExtensions = [
   "webp",
 ];
 
-const allowedMimeTypes = [
+export const allowedMimeTypes = [
   'application/pdf',
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
