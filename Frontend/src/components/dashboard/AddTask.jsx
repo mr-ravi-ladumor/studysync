@@ -81,7 +81,7 @@ function AddTask({setTasks, setShowAddTask }) {
               <button
                 type="button"
                 onClick={() => setShowAddTask(false)}
-                className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300
+                className="px-4 py-2 rounded text-gray-700 hover:bg-gray-200
                     transition-colors duration-300 "
               >
                 Cancel

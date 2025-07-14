@@ -1,6 +1,7 @@
 import React , {useState} from "react";
 import ResourceCards from "../components/resources/ResourceCards.jsx";
 import { useEffect } from "react";
+import AddResource from "../components/resources/AddResource.jsx";
 
 const filterChips = [
   { label: "All Resources", value: "all" },
@@ -13,7 +14,7 @@ const filterChips = [
 
 
 function Resources() {
-
+    const [showAddResource, setShowAddResource] = useState(false);
     const [resources, setResources] = useState([]);
 
     useEffect(() => {
@@ -39,7 +40,7 @@ function Resources() {
                 console.error("Error fetching resources:", error);
             }
         }
-        fetchResources();
+        // fetchResources();
     },[])
 
     
@@ -55,9 +56,16 @@ function Resources() {
           </p>
         </div>
         <div className="">
-          <button className=" bg-green-500 text-white px-4 py-1 rounded-lg flex items-center gap-2 justify-cente hover:bg-green-600 transition-colors duration-300 shadow-lg">
+          <button 
+            onClick={() => {setShowAddResource(true)}}
+            className=" bg-green-500 text-white px-4 py-1 rounded-lg flex items-center gap-2 justify-cente hover:bg-green-600 transition-colors duration-300 shadow-lg">
             <span className="text-2xl mb-1">+</span> Add Resource
           </button>
+            {showAddResource && (
+                <AddResource
+                    setShowAddResource={setShowAddResource}
+                />
+            )}
         </div>
       </div>
       <div className="filter-chips">
