@@ -6,7 +6,37 @@ import Resource from '../models/resource.model.js';
 
 
 const uploadResource = asyncHandler( async (req, res) => {
-    const {title, resourceType, subject} = req.body;
+    const {title, resourceType, subject, link} = req.body;
+
+    if (!title || !resourceType || !subject) {
+        throw new ApiError(400, 'Title, Resource Type, and Subject are required');
+    }
+
+    if (resourceType && resourceType === 'link'){
+        try {
+            new URL(link); 
+        } catch (error) {
+            throw new ApiError(400, 'Invalid URL format');
+        }
+
+        const resource = await Resource.create({
+        title,
+        subject,
+        resourceType,
+        link,
+        owner: req.user._id,
+        size: 0,
+        mimeType: "link/url",
+        originalFileName: null,
+        fileUrl: null,
+        });
+
+        return res
+        .status(201)
+        .json(new ApiResponse(201, resource, "Link resource saved"));
+    }
+    
+
     if(!req.file) {
         throw new ApiError(400, 'No file uploaded');
     }

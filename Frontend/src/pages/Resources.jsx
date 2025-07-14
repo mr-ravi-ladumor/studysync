@@ -40,7 +40,7 @@ function Resources() {
                 console.error("Error fetching resources:", error);
             }
         }
-        // fetchResources();
+        fetchResources();
     },[])
 
     

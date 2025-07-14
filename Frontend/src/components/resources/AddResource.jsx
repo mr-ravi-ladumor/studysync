@@ -1,4 +1,30 @@
 import React, { useState } from "react";
+const allowedExtensions = [
+      "pdf",
+      "doc",
+      "docx",
+      "jpg",
+      "jpeg",
+      "png",
+      "txt",
+    ];
+    const allowedMimeTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "image/jpeg",
+      "image/png",
+      "text/plain",
+    ];
+
+    const subjectsList = [
+    "Computer Science",
+    "Programming",
+    "Machine Learning",
+    "Mathematics",
+    "English",
+    "Other",
+  ];
 
 function AddResource({ setShowAddResource }) {
   const [resource, setResource] = useState({
@@ -9,15 +35,96 @@ function AddResource({ setShowAddResource }) {
     link: "",
     file: null,
   });
+  const [error, setError] = useState("");
 
-  const subjectsList = [
-    "Computer Science",
-    "Programming",
-    "Machine Learning",
-    "Mathematics",
-    "English",
-    "Other",
-  ];
+  
+
+  const onSubmitAddResource = async (e) => {
+    e.preventDefault();
+    
+
+    function validateResource() {
+      const { title, resourceType, subject, link, file, customSubject } =
+        resource;
+
+      // Required fields
+      if (!title || !resourceType || !subject) {
+        setError("Please fill in all required fields.");
+        return false;
+      }
+
+      // Link validation
+      if (resourceType === "link") {
+        if (!link) {
+          setError("Please provide a valid link.");
+          return false;
+        }
+        console.log(link);
+        try {
+          new URL(link);
+        } catch {
+          console.log("Invalid URL format:", link);
+          setError("Please enter a valid URL.");
+          return false;
+        }
+      }
+
+      // File validation
+      if (resourceType !== "link") {
+        if (!file) {
+          setError("Please upload a file.");
+          return false;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          setError("File size must be less than 10MB.");
+          return false;
+        }
+        // Extension and MIME type check
+        const ext = file.name.split(".").pop().toLowerCase();
+        if (
+          !allowedExtensions.includes(ext) ||
+          (file.type && !allowedMimeTypes.includes(file.type))
+        ) {
+          setError(
+            "File type not allowed. Allowed: pdf, doc, docx, jpg, jpeg, png, txt."
+          );
+          return false;
+        }
+      }
+
+      // Custom subject
+      if (subject === "Other" && !customSubject) {
+        setError("Please provide a subject name.");
+        return false;
+      }
+
+      setError("");
+      return true;
+    }
+    if (!validateResource()) return;
+    console.log("Resource data to be submitted:", resource);
+
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resources`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                title: resource.title,
+                resourceType: resource.resourceType,
+                subject: resource.subject === "Other" ? resource.customSubject : resource.subject,
+                link: resource.link,
+                file: resource.file ? resource.file.name : null, 
+            }),
+        });
+    } catch (error) {
+        console.error("newtork ! Error adding resource:", error);
+        setError("Failed to add resource. Please try again.");
+        return;
+    }
+  };
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
@@ -27,7 +134,12 @@ function AddResource({ setShowAddResource }) {
             Please fill in the details of your new resource below.
           </p>
 
-          <form className="flex flex-col gap-2">
+          <form className="flex flex-col gap-2" encType="multipart/form-data">
+            {error && (
+              <span className="text-sm text-red-600 font-medium mb-2">
+                {error}
+              </span>
+            )}
             {/* Resource Title */}
             <div className="flex flex-col gap-1">
               <label htmlFor="resource-title" className="block ">
@@ -121,29 +233,47 @@ function AddResource({ setShowAddResource }) {
                     required
                   />
                 </>
-              ) :  (
+              ) : (
                 <>
                   <label htmlFor="resource-file" className="block ">
                     Upload File
                   </label>
                   <label
                     htmlFor="resource-file"
-                    className="w-full flex flex-col items-center justify-center p-6 mb-3 border-2 border-dashed border-gray-500 rounded cursor-pointer hover:bg-gray-50 transition"
+                    className="w-full flex flex-col items-center justify-center p-6 mb-3 border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-50 transition"
                   >
                     <span className="text-gray-500">
-                      Click to upload or drag file here
+                      Click to <span className="text-green-500">upload</span> or
+                      drag & drop a file
+                    </span>
+                    <span className="text-[12px] text-gray-500">
+                      pdf, docx, jpg, jpeg, png, txt up to 10 MB
                     </span>
                     <input
                       id="resource-file"
                       type="file"
                       className="hidden"
-                      onChange={(e) =>
-                        setResource({ ...resource, file: e.target.files[0] })
-                      }
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,image/*,.txt,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          if (file.size > 10 * 1024 * 1024) {
+                            // 10MB
+                            setError("File size must be less than 10MB.");
+                            setResource({ ...resource, file: null });
+                          } else {
+                            setError("");
+                            setResource({ ...resource, file });
+                          }
+                        } else {
+                          setError("");
+                          setResource({ ...resource, file: null });
+                        }
+                      }}
                       required
-                    />
-                  </label>  
-                  {resource.file && (
+                    />{" "}
+                  </label>
+                  {resource.file && !error && (
                     <span className="text-sm text-gray-600">
                       {resource.file.name}
                     </span>
@@ -152,21 +282,22 @@ function AddResource({ setShowAddResource }) {
               )}
             </div>
             <div className="flex justify-end gap-2">
-                <button
-                    type="button"
-                    onClick={() => setShowAddResource(false)}
-                    className="px-4 py-2 rounded  text-gray-700 hover:bg-gray-200
+              <button
+                type="button"
+                onClick={() => setShowAddResource(false)}
+                className="px-4 py-2 rounded  text-gray-700 hover:bg-gray-200
                         transition-colors duration-300 "
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
-                >
-                    Add Task
-                </button>
-                </div>
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                onClick={onSubmitAddResource}
+                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
+              >
+                Add Task
+              </button>
+            </div>
           </form>
         </div>
       </div>
