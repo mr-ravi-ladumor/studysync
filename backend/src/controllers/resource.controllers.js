@@ -20,15 +20,12 @@ const uploadResource = asyncHandler( async (req, res) => {
         }
 
         const resource = await Resource.create({
-        title,
-        subject,
-        resourceType,
-        link,
-        owner: req.user._id,
-        size: 0,
-        mimeType: "link/url",
-        originalFileName: null,
-        fileUrl: null,
+            title,
+            resourceType,
+            subject,
+            link,
+            owner: req.user._id,
+            mimeType: "link/url",
         });
 
         return res

@@ -12,7 +12,10 @@ const resourceSchema = new Schema(
 
     originalFileName: {
       type: String,
-      required: true,
+      default: null,
+      required: function () {
+        return this.resourceType !== "link";
+      },
     },
 
     resourceType: {
@@ -27,10 +30,16 @@ const resourceSchema = new Schema(
 
     fileUrl: {
       type: String, // Cloudinary URL
+      required: function () {
+        return this.resourceType !== "link";
+      }
     },
 
     link: {
       type: String, // External link
+      required: function () {
+        return this.resourceType === "link";
+      }
     },
 
     mimeType: {
@@ -40,7 +49,9 @@ const resourceSchema = new Schema(
 
     size: {
       type: Number,
-      required: true,
+      required:  function () {
+        return this.resourceType !== "link";
+        },
       max: 10 * 1024 * 1024, //  Max 10MB
     },
 

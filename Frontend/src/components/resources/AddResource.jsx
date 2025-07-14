@@ -1,30 +1,22 @@
 import React, { useState } from "react";
-const allowedExtensions = [
-      "pdf",
-      "doc",
-      "docx",
-      "jpg",
-      "jpeg",
-      "png",
-      "txt",
-    ];
-    const allowedMimeTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "image/jpeg",
-      "image/png",
-      "text/plain",
-    ];
+const allowedExtensions = ["pdf", "doc", "docx", "jpg", "jpeg", "png", "txt"];
+const allowedMimeTypes = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "image/jpeg",
+  "image/png",
+  "text/plain",
+];
 
-    const subjectsList = [
-    "Computer Science",
-    "Programming",
-    "Machine Learning",
-    "Mathematics",
-    "English",
-    "Other",
-  ];
+const subjectsList = [
+  "Computer Science",
+  "Programming",
+  "Machine Learning",
+  "Mathematics",
+  "English",
+  "Other",
+];
 
 function AddResource({ setShowAddResource }) {
   const [resource, setResource] = useState({
@@ -37,11 +29,8 @@ function AddResource({ setShowAddResource }) {
   });
   const [error, setError] = useState("");
 
-  
-
   const onSubmitAddResource = async (e) => {
     e.preventDefault();
-    
 
     function validateResource() {
       const { title, resourceType, subject, link, file, customSubject } =
@@ -104,25 +93,53 @@ function AddResource({ setShowAddResource }) {
     if (!validateResource()) return;
     console.log("Resource data to be submitted:", resource);
 
+    const formData = new FormData();
+
+    formData.append("title", resource.title);
+    formData.append("resourceType", resource.resourceType);
+    formData.append(
+      "subject",
+      resource.subject === "Other" ? resource.customSubject : resource.subject
+    );
+
+    if (resource.resourceType === "link") {
+      formData.append("link", resource.link);
+    } else {
+      formData.append("file", resource.file);
+    }
+
     try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resources`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                title: resource.title,
-                resourceType: resource.resourceType,
-                subject: resource.subject === "Other" ? resource.customSubject : resource.subject,
-                link: resource.link,
-                file: resource.file ? resource.file.name : null, 
-            }),
-        });
-    } catch (error) {
-        console.error("newtork ! Error adding resource:", error);
-        setError("Failed to add resource. Please try again.");
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/resources`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
+
+      const resourceData = await response.json();
+      if (!response.ok) {
+        console.error("Error adding resource:", resourceData.message);
+        setError(resourceData.message || "Failed to add resource.");
         return;
+      }
+
+      setShowAddResource(false);
+      setResource({
+        title: "",
+        resourceType: "",
+        subject: "",
+        customSubject: "",
+        link: "",
+        file: null,
+      });
+      setError("");
+      console.log("Resource added successfully:", resourceData.data);
+    } catch (error) {
+      console.error("newtork ! Error adding resource:", error);
+      setError("Failed to add resource. Please try again.");
+      return;
     }
   };
   return (
@@ -150,9 +167,10 @@ function AddResource({ setShowAddResource }) {
                 type="text"
                 name="resourceTitle"
                 value={resource.title}
-                onChange={(e) =>
-                  setResource({ ...resource, title: e.target.value })
-                }
+                onChange={(e) => {
+                  setResource({ ...resource, title: e.target.value });
+                  setError(""); // Clear error when user starts typing
+                }}
                 placeholder="Enter Resource Title..."
                 required
                 className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -167,9 +185,10 @@ function AddResource({ setShowAddResource }) {
                 id="resource-type"
                 className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={resource.resourceType}
-                onChange={(e) =>
-                  setResource({ ...resource, resourceType: e.target.value })
-                }
+                onChange={(e) => {
+                  setResource({ ...resource, resourceType: e.target.value });
+                  setError(""); // Clear error when user changes selection
+                }}
                 required
               >
                 <option value="">Select Type</option>
@@ -189,9 +208,10 @@ function AddResource({ setShowAddResource }) {
                 id="resource-subject"
                 className="w-full mb-3 px-3 py-2 border overflow-y-scroll rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={resource.subject}
-                onChange={(e) =>
-                  setResource({ ...resource, subject: e.target.value })
-                }
+                onChange={(e) => {
+                  setResource({ ...resource, subject: e.target.value });
+                  setError(""); // Clear error when user changes selection
+                }}
                 required
               >
                 <option value="">Select Subject</option>
@@ -207,9 +227,10 @@ function AddResource({ setShowAddResource }) {
                   placeholder="Enter Subject Name"
                   className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                   value={resource.customSubject}
-                  onChange={(e) =>
-                    setResource({ ...resource, customSubject: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setResource({ ...resource, customSubject: e.target.value });
+                    setError(""); // Clear error when user types
+                  }}
                   required
                 />
               )}
@@ -227,9 +248,10 @@ function AddResource({ setShowAddResource }) {
                     placeholder="Enter Resource Link"
                     className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                     value={resource.link}
-                    onChange={(e) =>
-                      setResource({ ...resource, link: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setResource({ ...resource, link: e.target.value });
+                      setError(""); // Clear error when user types
+                    }}
                     required
                   />
                 </>
@@ -273,7 +295,7 @@ function AddResource({ setShowAddResource }) {
                       required
                     />{" "}
                   </label>
-                  {resource.file && !error && (
+                  {resource.file && (
                     <span className="text-sm text-gray-600">
                       {resource.file.name}
                     </span>

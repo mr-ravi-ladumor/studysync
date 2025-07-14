@@ -1,6 +1,19 @@
 import React from 'react'
 import { FileText, CalendarIcon } from "lucide-react";
 
+function returnFileSize(number) {
+  if (typeof number !== 'number' || isNaN(number)) {
+      return "N/A";
+  }
+  if (number < 1e3) {
+    return `${number} bytes`;
+  } else if (number >= 1e3 && number < 1e6) {
+    return `${(number / 1e3).toFixed(1)} KB`;
+  }
+  return `${(number / 1e6).toFixed(1)} MB`;
+}
+
+
 function ResourceCards({ resources }) {
     const formatedDate = (date) => new Date(date).toLocaleDateString("en-US", {
         weekday: "long",
@@ -24,7 +37,7 @@ function ResourceCards({ resources }) {
                     </span>
                     <div>
                     <h3 className="font-bold text-lg">{res.title}</h3>
-                    <p className="text-gray-500 text-sm">{res.resourceType} • {Math.round((res.size/(1024.0)))} KB</p>
+                    <p className="text-gray-500 text-sm">{res.resourceType} • {returnFileSize(res.size)}</p>
                     </div>
                 </div>
                 <div className="h-px w-full bg-gray-200 my-4"></div>
@@ -45,7 +58,7 @@ function ResourceCards({ resources }) {
                     </div>
                     {/* Download action */}
                     <a
-                    href={`${res.fileUrl}`}
+                    href={`${res.fileUrl || res.link}`}
                     className="text-green-500 font-medium text-sm hover:underline"
                     target="_blank"
                     >

@@ -9,7 +9,7 @@ import {
 
 const router = Router();
 
-router.route('/').post(verifyAuthToken, uploadCloud.single('resource'), uploadResource)
+router.route('/').post(verifyAuthToken, uploadCloud.single('file'), uploadResource)
 router.route('/').get(verifyAuthToken, getAllResources)
 
 export default router;
