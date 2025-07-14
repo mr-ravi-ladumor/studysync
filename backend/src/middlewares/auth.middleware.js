@@ -5,7 +5,6 @@ import {User} from "../models/user.model.js";
 
 export const verifyAuthToken = asyncHandler(async(req, _, next) => {
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-    console.log(token)
 
     if(!token) {
         throw new ApiError(401, "Auth :: Unauthorized access, please login to continue");
