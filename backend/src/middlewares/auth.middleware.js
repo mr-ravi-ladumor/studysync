@@ -21,7 +21,6 @@ export const verifyAuthToken = asyncHandler(async(req, _, next) => {
     if(!user) {
         throw new ApiError(401, "Auth middleware :: User not found");
     }
-    console.log(user)
     req.user = user;
     next();
 })

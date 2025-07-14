@@ -1,5 +1,6 @@
-import React from "react";
-import { FileText, CalendarIcon } from "lucide-react";
+import React , {useState} from "react";
+import ResourceCards from "../components/resources/ResourceCards.jsx";
+import { useEffect } from "react";
 
 const filterChips = [
   { label: "All Resources", value: "all" },
@@ -10,50 +11,39 @@ const filterChips = [
   { label: "Others", value: "others" },
 ];
 
-const resources = [
-    {
-        id: 1,
-        title: "OOPs Notes",
-        type: "PDF",
-        size: "2.4 MB",
-        dateAdded: "May 12, 2023",
-        category: ["Computer", "oops"],
-    },
-    {
-        id: 2,
-        title: "JavaScript Guide",
-        type: "PDF",
-        size: "1.2 MB",
-        dateAdded: "June 5, 2023",
-        category: ["Programming", "JavaScript"],
-    },
-    {
-        id: 3,
-        title: "React Documentation",
-        type: "Link",
-        size: "N/A",
-        dateAdded: "July 20, 2023",
-        category: ["Web Development", "React"],
-    },
-    {
-        id: 4,
-        title: "Machine Learning Basics",
-        type: "PDF",
-        size: "3.5 MB",
-        dateAdded: "August 15, 2023",
-        category: ["AI", "Machine Learning"],
-    },
-    {
-        id: 5,
-        title: "CSS Tricks",
-        type: "Link",
-        size: "N/A",
-        dateAdded: "September 10, 2023",
-        category: ["Web Development", "CSS"],
-    }
-]
 
 function Resources() {
+
+    const [resources, setResources] = useState([]);
+
+    useEffect(() => {
+        // Fetch resources from the backend when the component mounts
+        const fetchResources = async () => {
+            try {
+                const response = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/resources`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    }
+                )
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch resources");
+                }
+
+                const allResourcesData = await response.json();
+                setResources(allResourcesData.data);
+                console.log("Resources fetched successfully:", allResourcesData.data);
+            } catch (error) {
+                console.error("Error fetching resources:", error);
+            }
+        }
+        fetchResources();
+    },[])
+
+    
+
   return (
     <div className="h-screen flex flex-col gap-5 ">
       <div className="header flex justify-between items-center">
@@ -83,44 +73,7 @@ function Resources() {
         </div>
       </div>
       <div className="mt-4 cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {
-        resources.map((res) => (
-            <div className="card bg-white rounded-xl px-3 py-3">
-                <div className="flex items-center gap-3">
-                    <span className="bg-blue-100 text-blue-600 rounded-lg p-2">
-                        <FileText className="h-5 w-5" />
-                    </span>
-                    <div>
-                    <h3 className="font-bold text-lg">{res.title}</h3>
-                    <p className="text-gray-500 text-sm">{res.type} • {res.size}</p>
-                    </div>
-                </div>
-                <div className="h-px w-full bg-gray-200 my-4"></div>
-                <div className="flex items-center justify-between">
-                    <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <span className="text-gray-400 text-sm">
-                        <CalendarIcon className="h-3 w-3"/></span>
-                        <span className="text-gray-500 text-sm">
-                        {res.dateAdded}</span>
-                    </div>
-                    <div className="flex gap-2">
-                        <span className="bg-blue-100 text-blue-600 rounded px-2 py-0.5 text-xs">
-                        {res.category[0]}</span>
-                        <span className="bg-gray-100 text-gray-600 rounded px-2 py-0.5 text-xs">
-                        {res.category[1]}</span>
-                    </div>
-                    </div>
-                    {/* Download action */}
-                    <a
-                    href="#"
-                    className="text-green-500 font-medium text-sm hover:underline"
-                    >
-                    Download
-                    </a>
-                </div>
-            </div>)
-        )}
+            <ResourceCards resources={resources}/>
       </div>
       <div className="pagination"></div>
     </div>

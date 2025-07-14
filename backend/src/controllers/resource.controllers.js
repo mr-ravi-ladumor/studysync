@@ -42,7 +42,26 @@ const uploadResource = asyncHandler( async (req, res) => {
     );
 })
 
+const getAllResources = asyncHandler(async (req, res) => {
+    const resources = await Resource.find(
+        {
+            owner: req.user._id
+        }
+    )
+
+    if (!resources) {
+        throw new ApiError(404, 'No resources found');
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, resources, 'All Resources retrieved successfully')
+    );
+})
+
 
 export {
     uploadResource,
+    getAllResources,
 }
