@@ -32,7 +32,6 @@ function TaskList({tasks, setTasks}) {
     fetchTasks();
   }, []);
 
-  useEffect
 
   return (
     <>
