@@ -18,7 +18,7 @@ function Dashboard() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-1">
           <h3 className="text-2xl font-medium">Dashboard</h3>
-          <p className="text-gray-600 text-medium">
+          <p className="text-gray-600">
             Welcome back, {user.firstname}! Here's an overview of your academic
             progress.
           </p>
