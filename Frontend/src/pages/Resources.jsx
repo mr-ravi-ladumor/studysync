@@ -73,7 +73,7 @@ function Resources() {
           {filterChips.map((chip) => (
             <span
               key={chip.value}
-              className="text-[15px] text-gray-800 bg-gray-200 rounded-2xl py-1 px-[10px] text-center hover:bg-gray-300 focus:bg-green-500 transition-bg duration-200"
+              className="text-[15px] text-gray-800 bg-gray-200 rounded-3xl py-[5px] px-[10px] text-center hover:bg-gray-300 focus:bg-green-500 transition-bg duration-200"
             >
               {chip.label}
             </span>

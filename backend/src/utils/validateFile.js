@@ -1,17 +1,8 @@
 import ApiError from './ApiError.js';
 
 export const allowedExtensions = [
-  "pdf",
-  "doc",
-  "docx",
-  "ppt",
-  "pptx",
-  "txt",
-  "jpg",
-  "jpeg",
-  "png",
-  "gif",
-  "webp",
+  "pdf", "doc", "docx", "ppt", "pptx", "txt",
+  "jpg", "jpeg", "png"
 ];
 
 export const allowedMimeTypes = [
@@ -21,7 +12,8 @@ export const allowedMimeTypes = [
   'application/vnd.ms-powerpoint',
   'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   'text/plain',
-  'image/jpeg', 'image/png', 'image/gif', 'image/webp'
+  'image/jpeg',
+  'image/png'
 ];
 
 const fileFilter = (req, file, cb) => {

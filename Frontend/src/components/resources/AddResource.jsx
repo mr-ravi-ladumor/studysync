@@ -1,13 +1,21 @@
 import React, { useState } from "react";
-const allowedExtensions = ["pdf", "doc", "docx", "jpg", "jpeg", "png", "txt"];
-const allowedMimeTypes = [
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "image/jpeg",
-  "image/png",
-  "text/plain",
+// ✅ Use this
+export const allowedExtensions = [
+  "pdf", "doc", "docx", "ppt", "pptx", "txt",
+  "jpg", "jpeg", "png"
 ];
+
+export const allowedMimeTypes = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'text/plain',
+  'image/jpeg',
+  'image/png'
+];
+
 
 const subjectsList = [
   "Computer Science",
@@ -146,7 +154,7 @@ function AddResource({ setShowAddResource }) {
     <>
       <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
         <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
-          <h3 className="text-xl  mb-2">Add New Task</h3>
+          <h3 className="text-xl  mb-2">Add New Resource</h3>
           <p className="text-gray-600 mb-6 border-b pb-5 border-gray-300">
             Please fill in the details of your new resource below.
           </p>
@@ -169,7 +177,7 @@ function AddResource({ setShowAddResource }) {
                 value={resource.title}
                 onChange={(e) => {
                   setResource({ ...resource, title: e.target.value });
-                  setError(""); // Clear error when user starts typing
+                  setError(""); 
                 }}
                 placeholder="Enter Resource Title..."
                 required
@@ -187,7 +195,7 @@ function AddResource({ setShowAddResource }) {
                 value={resource.resourceType}
                 onChange={(e) => {
                   setResource({ ...resource, resourceType: e.target.value });
-                  setError(""); // Clear error when user changes selection
+                  setError(""); 
                 }}
                 required
               >
@@ -195,7 +203,6 @@ function AddResource({ setShowAddResource }) {
                 <option value="document">Document</option>
                 <option value="image">Image</option>
                 <option value="link">Link</option>
-                <option value="video">Video</option>
                 <option value="other">Other</option>
               </select>
             </div>
@@ -210,7 +217,7 @@ function AddResource({ setShowAddResource }) {
                 value={resource.subject}
                 onChange={(e) => {
                   setResource({ ...resource, subject: e.target.value });
-                  setError(""); // Clear error when user changes selection
+                  setError(""); 
                 }}
                 required
               >
@@ -229,7 +236,7 @@ function AddResource({ setShowAddResource }) {
                   value={resource.customSubject}
                   onChange={(e) => {
                     setResource({ ...resource, customSubject: e.target.value });
-                    setError(""); // Clear error when user types
+                    setError("");
                   }}
                   required
                 />
@@ -250,7 +257,7 @@ function AddResource({ setShowAddResource }) {
                     value={resource.link}
                     onChange={(e) => {
                       setResource({ ...resource, link: e.target.value });
-                      setError(""); // Clear error when user types
+                      setError("");
                     }}
                     required
                   />
@@ -317,7 +324,7 @@ function AddResource({ setShowAddResource }) {
                 onClick={onSubmitAddResource}
                 className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
               >
-                Add Task
+                Add Resource
               </button>
             </div>
           </form>

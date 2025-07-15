@@ -46,12 +46,15 @@ const uploadResource = asyncHandler( async (req, res) => {
         throw new ApiError(400, 'File size exceeds the limit of 10 MB');
     }
 
+    
+
     const resource = await Resource.create({
         title: title,
         originalFileName: req.file.originalname,
         resourceType: resourceType,
         subject: subject,
         fileUrl: req.file.path,
+        publicId: req.file.filename,
         mimeType: req.file.mimetype,
         size: req.file.size,
         owner: req.user._id,
@@ -86,6 +89,31 @@ const getAllResources = asyncHandler(async (req, res) => {
         new ApiResponse(200, resources, 'All Resources retrieved successfully')
     );
 })
+
+const getResourceById = asyncHandler(async (req, res) => {
+    const resourceId = req.params.resourceId;
+
+    if (!resourceId) {
+        throw new ApiError(400, 'Resource ID is required');
+    }
+
+    const resource = await Resource.findOne({
+        _id : resourceId,
+        owner : req.user._id
+    });
+
+    if (!resource) {
+        throw new ApiError(404, 'Resource not found');
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, resource, 'Resource retrieved successfully')
+    );
+})
+
+
 
 
 export {

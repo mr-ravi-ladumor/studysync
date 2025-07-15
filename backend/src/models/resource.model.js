@@ -41,6 +41,12 @@ const resourceSchema = new Schema(
         return this.resourceType === "link";
       }
     },
+    publicId : {
+        type: String,
+        required: function () {
+            return this.resourceType !== "link";
+        }
+    },
 
     mimeType: {
       type: String,
