@@ -6,15 +6,18 @@ import {
     uploadResource,
     getAllResources,
     getResourceById,
-    updateResource
+    updateResource,
+    deleteResource
  } from '../controllers/resource.controllers.js';
 
 
 const router = Router();
 
-router.route('/').post(verifyAuthToken, uploadCloud.single('file'), uploadResource)
 router.route('/').get(verifyAuthToken, getAllResources)
+router.route('/upload').post(verifyAuthToken, uploadCloud.single('file'), uploadResource)
 router.route('/:resourceId').get(verifyAuthToken, getResourceById)
-router.route('/:resourceId').put(verifyAuthToken, uploadCloud.single('file'), updateResource)
+router.route('/update/:resourceId').put(verifyAuthToken, uploadCloud.single('file'), updateResource)
+router.route('/delete/:resourceId').put(verifyAuthToken, uploadCloud.single('file'), deleteResource)
+
 
 export default router;

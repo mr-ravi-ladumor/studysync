@@ -118,7 +118,7 @@ function AddResource({ setShowAddResource }) {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/resources`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/resources/upload`,
         {
           method: "POST",
           credentials: "include",

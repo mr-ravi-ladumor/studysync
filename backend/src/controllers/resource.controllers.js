@@ -265,9 +265,35 @@ const updateResource = asyncHandler(async (req, res) => {
     );
 })
 
+const deleteResource = asyncHandler(async (req, res) => {
+    const resourceId = req.params.resourceId;
+    if (!resourceId) {
+        throw new ApiError(400, 'Resource ID is required');
+    }
+
+    const resource = await Resource.findOneAndDelete({
+        _id: resourceId,
+        owner: req.user._id
+    });
+
+    if (!resource) {
+        throw new ApiError(404, 'Resource not found');
+    }
+
+    //delete the file from cloudinary
+    await deleteFileFromCloudinary(resource.publicId);
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, resource, 'Resource deleted successfully')
+    );
+})
+
 export {
     uploadResource,
     getAllResources,
     getResourceById,
     updateResource,
+    deleteResource
 }
