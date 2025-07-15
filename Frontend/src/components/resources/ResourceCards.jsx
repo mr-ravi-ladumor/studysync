@@ -1,5 +1,6 @@
 import React from 'react'
 import { FileText, CalendarIcon } from "lucide-react";
+import ThreeDotsMenu from "../utility/ThreeDotsMenu.jsx";
 
 function returnFileSize(number) {
   if (typeof number !== 'number' || isNaN(number)) {
@@ -31,14 +32,17 @@ function ResourceCards({ resources }) {
         ) : (
         resources.map((res) => (
             <div key={res._id} className="card bg-white rounded-xl px-3 py-3">
-                <div className="flex items-center gap-3">
-                    <span className="bg-blue-100 text-blue-600 rounded-lg p-2">
-                        <FileText className="h-5 w-5" />
-                    </span>
-                    <div>
-                    <h3 className="font-bold text-lg">{res.title}</h3>
-                    <p className="text-gray-500 text-sm">{res.resourceType} • {returnFileSize(res.size)}</p>
+                <div className="flex  justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                        <span className="bg-blue-100 text-blue-600 rounded-lg p-2">
+                            <FileText className="h-5 w-5" />
+                        </span>
+                        <div>
+                        <h3 className="font-bold text-lg">{res.title}</h3>
+                        <p className="text-gray-500 text-sm">{res.resourceType} • {returnFileSize(res.size)}</p>
+                        </div>
                     </div>
+                    <ThreeDotsMenu/>
                 </div>
                 <div className="h-px w-full bg-gray-200 my-4"></div>
                 <div className="flex items-center justify-between">
