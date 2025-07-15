@@ -1,7 +1,8 @@
 import multer from "multer";
+import ApiError from "../utils/ApiError.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
-import fileFilter from "../utils/validateFile.js";
+import { allowedExtensions, allowedMimeTypes } from "../constants.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const storage = new CloudinaryStorage({
@@ -34,7 +35,17 @@ const storage = new CloudinaryStorage({
   },
 });
 
-console.log("Cloudinary Storage Configured:");
+
+const fileFilter = (req, file, cb) => {
+    const ext = file.originalname.split('.').pop().toLowerCase();
+    const mimeType = file.mimetype;
+
+    if( allowedExtensions.includes(ext) && allowedMimeTypes.includes(mimeType)) {
+        cb(null, true);
+    } else {
+        cb(new ApiError(401,'Invalid file type'), false);
+    }
+}
 
 
 const uploadCloud = multer({ 

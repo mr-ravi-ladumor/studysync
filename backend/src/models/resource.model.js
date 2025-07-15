@@ -12,7 +12,6 @@ const resourceSchema = new Schema(
 
     originalFileName: {
       type: String,
-      default: null,
       required: function () {
         return this.resourceType !== "link";
       },
@@ -21,6 +20,7 @@ const resourceSchema = new Schema(
     resourceType: {
       type: String,
       required: true,
+      enum: ["document", "image", "link", "video", "other"],
     },
 
     subject: {
@@ -32,20 +32,21 @@ const resourceSchema = new Schema(
       type: String, // Cloudinary URL
       required: function () {
         return this.resourceType !== "link";
-      }
+      },
     },
 
     link: {
       type: String, // External link
       required: function () {
         return this.resourceType === "link";
-      }
+      },
     },
-    publicId : {
-        type: String,
-        required: function () {
-            return this.resourceType !== "link";
-        }
+
+    publicId: {
+      type: String,
+      required: function () {
+        return this.resourceType !== "link";
+      },
     },
 
     mimeType: {
@@ -55,9 +56,9 @@ const resourceSchema = new Schema(
 
     size: {
       type: Number,
-      required:  function () {
+      required: function () {
         return this.resourceType !== "link";
-        },
+      },
       max: 10 * 1024 * 1024, //  Max 10MB
     },
 
