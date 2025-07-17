@@ -5,14 +5,12 @@ import ApiError from "./ApiError.js";
 // Function to delete a file from Cloudinary
 
 export const deleteFileFromCloudinary = asyncHandler(async (public_id) => {
-
     if (!public_id) {
         throw new ApiError(400, 'Public ID is required to delete a file');
     }
 
-    console.log("Deleting file")
     const result = await cloudinary.uploader.destroy(public_id);
 
-    console.log("Cloudinary delete result:", result);
+    console.log("Cloudinary file deleted :");
     return result;
 })

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-// ✅ Use this
-export const allowedExtensions = [
+
+const allowedExtensions = [
   "pdf",
   "doc",
   "docx",
@@ -12,7 +12,7 @@ export const allowedExtensions = [
   "png",
 ];
 
-export const allowedMimeTypes = [
+const allowedMimeTypes = [
   "application/pdf",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -32,57 +32,52 @@ const subjectsList = [
   "Other",
 ];
 
-function AddResource({ setShowAddResource, setResources }) {
+function EditResource({
+  resourceData,
+  setResources,
+  setShowEditResource,
+  setSelectedResource,
+}) {
   const [resource, setResource] = useState({
-    title: "",
-    resourceType: "",
-    subject: "",
+    title: resourceData.title,
+    resourceType: resourceData.resourceType,
+    subject: resourceData.subject,
     customSubject: "",
-    link: "",
+    link: resourceData.link || "",
     file: null,
   });
   const [error, setError] = useState("");
 
-  const onSubmitAddResource = async (e) => {
+  const onSubmitEditResource = async (e) => {
     e.preventDefault();
 
     function validateResource() {
       const { title, resourceType, subject, link, file, customSubject } =
         resource;
 
-      // Required fields
       if (!title || !resourceType || !subject) {
         setError("Please fill in all required fields.");
         return false;
       }
 
-      // Link validation
       if (resourceType === "link") {
         if (!link) {
           setError("Please provide a valid link.");
           return false;
         }
-        console.log(link);
         try {
           new URL(link);
         } catch {
-          console.log("Invalid URL format:", link);
           setError("Please enter a valid URL.");
           return false;
         }
       }
 
-      // File validation
-      if (resourceType !== "link") {
-        if (!file) {
-          setError("Please upload a file.");
-          return false;
-        }
+      if (resourceType !== "link" && file) {
         if (file.size > 10 * 1024 * 1024) {
           setError("File size must be less than 10MB.");
           return false;
         }
-        // Extension and MIME type check
         const ext = file.name.split(".").pop().toLowerCase();
         if (
           !allowedExtensions.includes(ext) ||
@@ -95,7 +90,6 @@ function AddResource({ setShowAddResource, setResources }) {
         }
       }
 
-      // Custom subject
       if (subject === "Other" && !customSubject) {
         setError("Please provide a subject name.");
         return false;
@@ -104,11 +98,10 @@ function AddResource({ setShowAddResource, setResources }) {
       setError("");
       return true;
     }
+
     if (!validateResource()) return;
-    console.log("Resource data to be submitted:", resource);
 
     const formData = new FormData();
-
     formData.append("title", resource.title);
     formData.append("resourceType", resource.resourceType);
     formData.append(
@@ -118,51 +111,50 @@ function AddResource({ setShowAddResource, setResources }) {
 
     if (resource.resourceType === "link") {
       formData.append("link", resource.link);
-    } else {
+    } else if (resource.file) {
       formData.append("file", resource.file);
     }
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/resources/upload`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/resources/update/${
+          resourceData._id
+        }`,
         {
-          method: "POST",
+          method: "PUT",
           credentials: "include",
           body: formData,
         }
       );
 
-      const resourceData = await response.json();
+      const updatedResource = await response.json();
+        console.log("Updated Resource:", updatedResource);
       if (!response.ok) {
-        console.error("Error adding resource:", resourceData.message);
-        setError(resourceData.message || "Failed to add resource.");
-        return;
+        throw new Error(updatedResource.message || "Failed to update resource");
       }
-      setShowAddResource(false);
-      setResource({
-        title: "",
-        resourceType: "",
-        subject: "",
-        customSubject: "",
-        link: "",
-        file: null,
-      });
-      setError("");
-      setResources((prevResources) => [...prevResources, resourceData.data]);
-      console.log("Resource added successfully:", resourceData.data);
+
+      setShowEditResource(false);
+      setSelectedResource(null);
+      setResources((prevResources) =>
+        prevResources.map((res) =>
+          res._id === updatedResource.data._id ? updatedResource.data : res
+        )
+      );
+
+      alert("Resource updated successfully!");
     } catch (error) {
-      console.error("newtork ! Error adding resource:", error);
-      setError("Failed to add resource. Please try again.");
-      return;
+      console.error("Error updating resource:", error);
+      alert("Failed to update resource. Please try again.");
     }
   };
+
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
         <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
-          <h3 className="text-xl  mb-2">Add New Resource</h3>
+          <h3 className="text-xl mb-2">Edit Resource</h3>
           <p className="text-gray-600 mb-6 border-b pb-5 border-gray-300">
-            Please fill in the details of your new resource below.
+            Please update the details of your resource below.
           </p>
 
           <form className="flex flex-col gap-2" encType="multipart/form-data">
@@ -171,7 +163,7 @@ function AddResource({ setShowAddResource, setResources }) {
                 {error}
               </span>
             )}
-            {/* Resource Title */}
+
             <div className="flex flex-col gap-1">
               <label htmlFor="resource-title" className="block ">
                 Resource Title
@@ -190,7 +182,7 @@ function AddResource({ setShowAddResource, setResources }) {
                 className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
-            {/* Resource Type */}
+
             <div className="flex flex-col gap-1">
               <label htmlFor="resource-type" className="block ">
                 Resource Type
@@ -212,7 +204,7 @@ function AddResource({ setShowAddResource, setResources }) {
                 <option value="other">Other</option>
               </select>
             </div>
-            {/* Subject */}
+
             <div className="flex flex-col gap-1">
               <label htmlFor="resource-subject" className="block ">
                 Subject
@@ -248,7 +240,7 @@ function AddResource({ setShowAddResource, setResources }) {
                 />
               )}
             </div>
-            {/* Resource Link or File Upload */}
+
             <div className="flex flex-col gap-1">
               {resource.resourceType === "link" ? (
                 <>
@@ -271,8 +263,11 @@ function AddResource({ setShowAddResource, setResources }) {
               ) : (
                 <>
                   <label htmlFor="resource-file" className="block ">
-                    Upload File
+                    Upload New File (Optional)
                   </label>
+                  <div className="text-xs text-gray-500 mb-2">
+                    Current: {resourceData.originalFileName || "No file"}
+                  </div>
                   <label
                     htmlFor="resource-file"
                     className="w-full flex flex-col items-center justify-center p-6 mb-3 border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-50 transition"
@@ -293,7 +288,6 @@ function AddResource({ setShowAddResource, setResources }) {
                         const file = e.target.files[0];
                         if (file) {
                           if (file.size > 10 * 1024 * 1024) {
-                            // 10MB
                             setError("File size must be less than 10MB.");
                             setResource({ ...resource, file: null });
                           } else {
@@ -305,32 +299,31 @@ function AddResource({ setShowAddResource, setResources }) {
                           setResource({ ...resource, file: null });
                         }
                       }}
-                      required
-                    />{" "}
+                    />
                   </label>
                   {resource.file && (
                     <span className="text-sm text-gray-600">
-                      {resource.file.name}
+                      New file: {resource.file.name}
                     </span>
                   )}
                 </>
               )}
             </div>
+
             <div className="flex justify-end gap-2">
               <button
                 type="button"
-                onClick={() => setShowAddResource(false)}
-                className="px-4 py-2 rounded  text-gray-700 hover:bg-gray-200
-                        transition-colors duration-300 "
+                onClick={() => setShowEditResource(false)}
+                className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors duration-300"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                onClick={onSubmitAddResource}
+                onClick={onSubmitEditResource}
                 className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
               >
-                Add Resource
+                Update
               </button>
             </div>
           </form>
@@ -340,4 +333,4 @@ function AddResource({ setShowAddResource, setResources }) {
   );
 }
 
-export default AddResource;
+export default EditResource;

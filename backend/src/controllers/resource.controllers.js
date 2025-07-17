@@ -60,7 +60,6 @@ const uploadResource = asyncHandler( async (req, res) => {
         size: req.file.size,
         owner: req.user._id,
     });
-    // console.log("Resource Created:", resource);
 
     if (!resource) {
         throw new ApiError(500, 'Failed to create resource in database');
@@ -136,7 +135,6 @@ const updateResource = asyncHandler(async (req, res) => {
     if (!title || !resourceType || !subject) {
         throw new ApiError(400, 'Title, Resource Type, and Subject are required');
     }
-
     // case - 1:  just title, subject
     // case - 2 : link update (resourceType is link)
     // case - 3 : file update
@@ -173,7 +171,6 @@ const updateResource = asyncHandler(async (req, res) => {
 
     // 3 - file to file update
     else if (resourceType !== 'link' && existingResource.resourceType !== 'link') {
-
         if (!req.file) {
             throw new ApiError(400, 'No file uploaded');
         }
@@ -237,11 +234,11 @@ const updateResource = asyncHandler(async (req, res) => {
             throw new ApiError(400, `Invalid file type ${req.file.mimetype}`);
         }
 
+
         if (req.file.size > 10 * 1024 * 1024) {
             throw new ApiError(400, 'File size exceeds the limit of 10 MB');
         }
-        //delete the existing file from cloudinary
-        await deleteFileFromCloudinary(existingResource.publicId);
+
         existingResource.originalFileName = req.file.originalname;
         existingResource.resourceType = resourceType;
         existingResource.fileUrl = req.file.path;
@@ -257,7 +254,6 @@ const updateResource = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, existingResource, "Resource updated to file"));
     }
 
-
     res
     .status(200)
     .json(
@@ -270,18 +266,20 @@ const deleteResource = asyncHandler(async (req, res) => {
     if (!resourceId) {
         throw new ApiError(400, 'Resource ID is required');
     }
-
     const resource = await Resource.findOneAndDelete({
         _id: resourceId,
-        owner: req.user._id
+        owner: req.user._id.toString()
     });
-
     if (!resource) {
         throw new ApiError(404, 'Resource not found');
     }
 
-    //delete the file from cloudinary
-    await deleteFileFromCloudinary(resource.publicId);
+    // If the resource is a file (not a link), delete it from Cloudinary
+    if (resource && resource.resourceType !== 'link') {
+        await deleteFileFromCloudinary(resource.publicId);
+    }
+
+    
 
     res
     .status(200)
