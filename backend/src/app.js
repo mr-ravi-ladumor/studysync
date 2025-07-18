@@ -22,6 +22,7 @@ import resourceRoutes from './routes/resource.routes.js';
 app.use('/api/user', userRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/resources', resourceRoutes);
+app.use('/api/calendar', calendarRoutes);
 
 // global error handler middleware
 import errorHandler from './middlewares/errorHandler.middleware.js';

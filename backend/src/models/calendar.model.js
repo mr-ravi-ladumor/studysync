@@ -6,7 +6,7 @@ const calendarSchema = new Schema({
         required: true,
         trim: true,
         minLength: 3,
-        maxLength: 50,
+        maxLength: 100,
     },
 
     description: {
@@ -14,12 +14,13 @@ const calendarSchema = new Schema({
         trim: true,
         maxLength: 500,
     },
-
-    startDate: {
+  
+    startDateTime: {
         type: Date,
         required: true,
     },
-    endDate: {
+
+    endDateTime: {
         type: Date,
         required: true,
     },
@@ -30,11 +31,18 @@ const calendarSchema = new Schema({
         maxLength: 100,
     },
 
+    category: {
+        type: String,
+        required: true,
+    },
+
     owner: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User',
     }
+}, {
+    timestamps: true
 })
 
 const Calendar = model('Calendar', calendarSchema);
