@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
@@ -124,8 +124,10 @@ function MyCalendar(props) {
         console.log("Date clicked:", slotInfo.start);
     };
 
-    // Force today's date for consistent testing
-    const today = new Date(2025, 6, 20); // July 20, 2025
+    
+    const today = useMemo(() => {
+        return new Date(Date.now()); 
+    },[])
 
     const eventPropGetter = (event) => {
         const category = event.resource || "default";
@@ -147,7 +149,7 @@ function MyCalendar(props) {
                 startAccessor="start"
                 endAccessor="end"
                 defaultView="month"
-                views={["month", "week", "day"]}
+                views={["month", "week", "day", "agenda"]}
                 onSelectEvent={handleSelectEvent}
                 onSelectSlot={handleSelectSlot}
                 selectable
@@ -161,7 +163,7 @@ function MyCalendar(props) {
                 }}
                 eventPropGetter={eventPropGetter}
                 style={{
-                    height: "80vh", // Use viewport height for responsiveness
+                    height: "80vh",
                     width: "100%",
                     margin: "0",
                     background: "transparent",
@@ -194,7 +196,7 @@ function Calender() {
                 </button>
             </div>
             <main className="bg-white rounded-lg shadow-md p-4">
-                <MyCalendar events={events} />
+                <MyCalendar events={calendarEvents} />
             </main>
         </div>
     );

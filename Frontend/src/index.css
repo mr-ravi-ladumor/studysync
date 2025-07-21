@@ -6,14 +6,25 @@
     --color-sidebar-text: #cbd5e0; /* Light gray */
 }
 
+.rbc-off-range-bg {
+    background-color: #e6eaed !important;
+}
+
 /* Calendar Container */
 .rbc-calendar {
-    background: #fff;
+    /* background: #fff;
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     padding: 24px;
     border: none;
-    font-family: inherit;
+    font-family: inherit; */
+}
+
+.rbc-event-calendar {
+    background: #f3f4f6; /* Light gray background */
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Toolbar/Header */
@@ -67,6 +78,13 @@
 }
 
 /* Month View Grid */
+.rbc-event-content {
+    display: flex;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
 .rbc-month-view {
     border: 1px solid #e5e7eb;
     border-radius: 12px;
@@ -95,14 +113,14 @@
 }
 
 /* Date Cells */
-.rbc-date-cell {
-    padding: 8px;
-    min-height: 100px;
+/* .rbc-date-cell {
     border-right: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
     background: #fff;
     position: relative;
-}
+    min-height: 120px;
+    padding: 4px;
+} */
 
 .rbc-date-cell:last-child {
     border-right: none;
@@ -112,30 +130,26 @@
     background: #f8fafc;
 }
 
-.rbc-off-range,
+/* .rbc-off-range,
 .rbc-off-range button,
 .rbc-off-range a {
     color: #d1d5db;
-}
+} */
 
 /* Today Highlight */
 .rbc-today,
 .rbc-date-cell.rbc-today {
     background: #dcfce7;
-    border: 2px solid #22c55e;
-    box-shadow: 0 0 0 2px #22c55e33;
-}
-
-.rbc-now{
     background-color: #dcfce7;
-    color : #1db454;
-    border: 2px solid #22c55e;
-    box-shadow: 0 0 0 2px #22c55e33;
+    color: #1db454; 
 }
 
-.rbc-current{
-    /* box-shadow: 0 0 0 2px #22c55e33; */
-    
+.rbc-now {
+    background-color: #dcfce7;
+}
+
+.rbc-current {
+    color: #1db454;
 }
 
 .rbc-today button,
@@ -146,25 +160,33 @@
     color: #e72020 !important;
     font-weight: 700;
     border-radius: 8px;
-}   
+}
 
-.rbc-events-container{
-    border: none;
+.rbc-month-row{
+    /* border: 2px solid #1db454; */
+}
+
+.rbc-events-container {
+}
+
+.rbc-row-bg{
+    /* background: #0953e8; */
+    
 }
 
 /* Event Bars */
+
 .rbc-event {
-    /* background: #3b82f6; */
     color: #fff;
     border-radius: 6px;
     padding: 2px 8px;
-    margin: 2px 0;
     font-size: 0.95rem;
     font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* Do NOT set background or use !important here */
 }
 
 /* Show More Link */
@@ -181,56 +203,43 @@
     color: #374151;
 }
 
-
-
-
-
-
 /* Day  */
-.rbc-time-slot{
-    border:none;
+.rbc-time-slot {
+    border: none;
     text-align: center;
     text-transform: capitalize;
 }
 
-.rbc-time-content{
+.rbc-time-content {
     display: flex;
     gap: 8px;
 }
 
-.rbc-time-header{
-
+.rbc-time-header {
     display: flex;
-    gap: 8px
+    gap: 8px;
 }
-.rbc-day-bg{
-    border: none !important;
+.rbc-day-bg.rbc-today{
+    background-color: #dcfce7;
+    /* border: 2px solid #22c55e; */
 }
-
-.rbc-event{
-    background: #3b82f6 !important;
-    color: #fff;
-    border-radius: 6px;
-    padding: 2px 8px;
-    margin: 2px 0;
-    font-size: 0.95rem;
-    font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.rbc-day-bg {
+    
 }
 
-.rbc-day-slot{
-    border:none;
+/* Removed duplicate .rbc-event rule that was breaking month view */
+
+.rbc-day-slot {
+    border: none;
     text-align: center;
     text-transform: capitalize;
 }
 
-.rbc-label{
+.rbc-label {
     border: none;
     font-size: 1.2rem;
     font-weight: 600;
     color: rgb(67, 67, 67);
     text-transform: capitalize;
 }
+
