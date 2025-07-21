@@ -178,7 +178,7 @@ function MyCalendar(props) {
 }
 
 function Calender() {
-    const [calendarEvents, setCalendarEvents] = React.useState(events);
+    const [calendarEvents, setCalendarEvents] = useState(events);
     const [showAddEvent, setShowAddEvent] = useState(false);
     // Debug: Check today's date
     console.log("Today is:", new Date());
@@ -200,7 +200,7 @@ function Calender() {
                 </button>
                 {
                     showAddEvent && (
-                        <AddEvent setCalendarEvents={setCalendarEvents} />
+                        <AddEvent setShowAddEvent={setShowAddEvent} />
                     )
                 }
             </div>
