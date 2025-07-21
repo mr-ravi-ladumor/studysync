@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo , useState} from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
@@ -6,6 +6,7 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import AddEvent from "../components/calendar/AddEvent.jsx";
 
 // Import default CSS first
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -116,6 +117,7 @@ const CustomToolbar = (toolbar) => {
 };
 
 function MyCalendar(props) {
+    
     const handleSelectEvent = (event) => {
         console.log("Event clicked:", event);
     };
@@ -177,7 +179,7 @@ function MyCalendar(props) {
 
 function Calender() {
     const [calendarEvents, setCalendarEvents] = React.useState(events);
-
+    const [showAddEvent, setShowAddEvent] = useState(false);
     // Debug: Check today's date
     console.log("Today is:", new Date());
     console.log("Events:", events);
@@ -191,9 +193,16 @@ function Calender() {
                         Manage your schedule and never miss important deadlines.
                     </p>
                 </div>
-                <button className=" bg-green-500 text-white px-4 py-1 rounded-lg flex items-center gap-2 justify-cente hover:bg-green-600 transition-colors duration-300 shadow-lg">
+                <button
+                    onClick={() => setShowAddEvent(!showAddEvent)}
+                    className=" bg-green-500 text-white px-4 py-1 rounded-lg flex items-center gap-2 justify-cente hover:bg-green-600 transition-colors duration-300 shadow-lg">
                     <span className="text-2xl mb-1">+</span> Add Event
                 </button>
+                {
+                    showAddEvent && (
+                        <AddEvent setCalendarEvents={setCalendarEvents} />
+                    )
+                }
             </div>
             <main className="bg-white rounded-lg shadow-md p-4">
                 <MyCalendar events={calendarEvents} />

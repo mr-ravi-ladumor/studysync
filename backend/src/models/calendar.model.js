@@ -8,12 +8,6 @@ const calendarSchema = new Schema({
         minLength: 3,
         maxLength: 100,
     },
-
-    description: {
-        type: String,
-        trim: true,
-        maxLength: 500,
-    },
   
     startDateTime: {
         type: Date,
@@ -34,6 +28,12 @@ const calendarSchema = new Schema({
     category: {
         type: String,
         required: true,
+    },
+    
+    description: {
+        type: String,
+        trim: true,
+        maxLength: 500,
     },
 
     owner: {
