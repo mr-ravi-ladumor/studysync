@@ -5,8 +5,8 @@ import DeleteTask from "./DeleteTask.jsx";
 function TaskList({tasks, setTasks}) {
   console.log("tasklist");
   const [showUpdateTask, setShowUpdateTask] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
   const [showDeleteTask, setShowDeleteTask] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     // Fetch tasks from the backend when the component mounts

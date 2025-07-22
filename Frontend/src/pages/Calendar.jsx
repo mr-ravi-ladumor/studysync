@@ -7,6 +7,7 @@ import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AddEvent from "../components/calendar/AddEvent.jsx";
+import EventList from "../components/calendar/EventList.jsx";
 
 // Import default CSS first
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -204,9 +205,12 @@ function Calender() {
                     )
                 }
             </div>
-            <main className="bg-white rounded-lg shadow-md p-4">
+            <div className="bg-white rounded-lg shadow-md p-4">
                 <MyCalendar events={calendarEvents} />
-            </main>
+            </div>
+            <div className="bg-white rounded-xl px-5 py-4">
+                <EventList />
+            </div>
         </div>
     );
 }
