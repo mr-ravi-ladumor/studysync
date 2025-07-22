@@ -205,10 +205,10 @@ function Calender() {
                     )
                 }
             </div>
-            <div className="bg-white rounded-lg shadow-md p-4">
+            <div className="bg-white rounded-lg border-1 border-gray-200 p-4">
                 <MyCalendar events={calendarEvents} />
             </div>
-            <div className="bg-white rounded-xl px-5 py-4">
+            <div className="bg-white rounded-xl px-5 py-4 mt-4 border-1 border-gray-200">
                 <EventList />
             </div>
         </div>
