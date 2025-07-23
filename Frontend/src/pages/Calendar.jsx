@@ -26,27 +26,27 @@ const localizer = dateFnsLocalizer({
     locales,
 });
 
-const events = [
-    {
-        title: "Conference",
-        start: new Date(2025, 6, 20, 10, 0, 0), // July 20, 2025
-        end: new Date(2025, 6, 20, 11, 0, 0),
-        resource: "conference",
-    },
-    {
-        title: "Team Meeting",
-        start: new Date(2025, 6, 21, 14, 0, 0), // July 21, 2025
-        end: new Date(2025, 6, 21, 15, 0, 0),
-        resource: "meeting",
-    },
-    // Add more events for testing
-    {
-        title: "Study Session",
-        start: new Date(2025, 6, 22, 9, 0, 0), // July 22, 2025
-        end: new Date(2025, 6, 22, 11, 0, 0),
-        resource: "study",
-    },
-];
+// const events = [
+//     {
+//         title: "Conference",
+//         start: new Date(2025, 6, 20, 10, 0, 0), // July 20, 2025
+//         end: new Date(2025, 6, 20, 11, 0, 0),
+//         resource: "conference",
+//     },
+//     {
+//         title: "Team Meeting",
+//         start: new Date(2025, 6, 21, 14, 0, 0), // July 21, 2025
+//         end: new Date(2025, 6, 21, 15, 0, 0),
+//         resource: "meeting",
+//     },
+//     // Add more events for testing
+//     {
+//         title: "Study Session",
+//         start: new Date(2025, 6, 22, 9, 0, 0), // July 22, 2025
+//         end: new Date(2025, 6, 22, 11, 0, 0),
+//         resource: "study",
+//     },
+// ];
 
 // Custom Toolbar Component
 const CustomToolbar = (toolbar) => {
@@ -179,11 +179,8 @@ function MyCalendar(props) {
 }
 
 function Calender() {
-    const [calendarEvents, setCalendarEvents] = useState(events);
+    const [calendarEvents, setCalendarEvents] = useState([]);
     const [showAddEvent, setShowAddEvent] = useState(false);
-    // Debug: Check today's date
-    console.log("Today is:", new Date());
-    console.log("Events:", events);
 
     return (
         <div className="h-screen flex flex-col gap-5 ">
@@ -209,7 +206,10 @@ function Calender() {
                 <MyCalendar events={calendarEvents} />
             </div>
             <div className="bg-white rounded-xl px-5 py-4 mt-4 border-1 border-gray-200">
-                <EventList />
+                <EventList 
+                    calendarEvents={calendarEvents} 
+                    setCalendarEvents={setCalendarEvents}
+                />
             </div>
         </div>
     );
