@@ -2,9 +2,7 @@ import React, { useEffect } from "react";
 import { CalendarIcon, Pencil, Trash2 } from "lucide-react";
 import { format, isSameDay, isToday, isTomorrow, parseISO , differenceInCalendarDays} from "date-fns";
 
-const formatRange = (startUTC, endUTC) => {
-    const startDate = parseISO(startUTC);
-    const endDate = parseISO(endUTC);
+const formatRange = (startDate, endDate) => {
 
     let formattedString = "";
     const startTime = format(startDate, "hh:mm a");
@@ -35,8 +33,7 @@ const formatRange = (startUTC, endUTC) => {
     return formattedString;
 };
 
-const getRelativeDayLabel = (startUTC) => {
-    const startDate = parseISO(startUTC);
+const getRelativeDayLabel = (startDate) => {
     const today = new Date();
 
     if (isToday(startDate)) {
@@ -77,8 +74,13 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                     throw new Error("Failed to fetch Events");
                 }
                 const allEventsData = await response.json();
-                setCalendarEvents(allEventsData.data);
-                console.log("Events fetched successfully:", allEventsData.data);
+                const transformedEvents = allEventsData.data.map(event => ({
+                    ...event, 
+                    startDateTime: new Date(event.startDateTime),
+                    endDateTime: new Date(event.endDateTime)
+                }));
+                setCalendarEvents(transformedEvents);
+                console.log("Events fetched successfully:", transformedEvents);
             } catch (error) {
                 console.error("Error fetching Events:", error);
             }

@@ -1,10 +1,13 @@
 import React, { useMemo , useState} from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
+import {
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+} from "date-fns";
 import enUS from "date-fns/locale/en-US";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AddEvent from "../components/calendar/AddEvent.jsx";
 import EventList from "../components/calendar/EventList.jsx";
@@ -124,7 +127,7 @@ function MyCalendar(props) {
     };
 
     const handleSelectSlot = (slotInfo) => {
-        console.log("Date clicked:", slotInfo.start);
+        console.log("Date clicked:", slotInfo.startDateTime);
     };
 
     
@@ -133,12 +136,14 @@ function MyCalendar(props) {
     },[])
 
     const eventPropGetter = (event) => {
-        const category = event.resource || "default";
+        const category = event.category || "default";
         const colorMap = {
-            conference: "#ef4444", // Red
-            meeting: "#8b5cf6", // Purple
-            study: "#22c55e", // Green
-            default: "#3b82f6", // Blue
+            work: "#3b82f6",      // Blue
+            study: "#22c55e",     // Green  
+            personal: "#8b5cf6",  // Purple
+            meeting: "#f59e0b",   // Orange
+            other: "#6b7280",     // Gray
+            default: "#3b82f6"    // Blue
         };
         const backgroundColor = colorMap[category] || colorMap.default;
         return { style: { backgroundColor } };
@@ -149,8 +154,8 @@ function MyCalendar(props) {
             <Calendar
                 localizer={localizer}
                 events={props.events}
-                startAccessor="start"
-                endAccessor="end"
+                startAccessor="startDateTime"
+                endAccessor="endDateTime"
                 defaultView="month"
                 views={["month", "week", "day", "agenda"]}
                 onSelectEvent={handleSelectEvent}
@@ -160,7 +165,7 @@ function MyCalendar(props) {
                 showMultiDayTimes
                 step={60}
                 defaultDate={today}
-                getNow={() => today} // Force today to be July 20, 2025
+                getNow={() => today} 
                 components={{
                     toolbar: CustomToolbar,
                 }}
