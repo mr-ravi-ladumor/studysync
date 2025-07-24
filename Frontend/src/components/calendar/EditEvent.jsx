@@ -87,16 +87,16 @@ function EditEvent({ setShowEditEvent }) {
             const eventData = await response.json();
 
             if (!response.ok) {
-                console.log("Error adding event:", eventData);
-                setError(eventData.message || 'Failed to add event. Please try again.');
+                console.log("Error updating event:", eventData);
+                setError(eventData.message || 'Failed to updating event. Please try again.');
             }
 
-            console.log("Event added successfully:", eventData);
+            console.log("Event updated successfully:", eventData);
             setError('');
             setShowEditEvent(false);
         } catch (error) {
-            console.log("Network Error adding event:", error);
-            setError('Failed to add event. Please try again later.');
+            console.log("Network Error updating event:", error);
+            setError('Failed to update event. Please try again later.');
         }
     }
 
@@ -105,9 +105,7 @@ function EditEvent({ setShowEditEvent }) {
       <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
         <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
           <h3 className="text-xl  mb-2">Add Event</h3>
-          <p className="text-gray-600 mb-4 border-b pb-2 border-gray-300">
-            Please fill in the details of your new event below.
-          </p>
+          
             <form className="flex flex-col gap-1">
             {error && (
               <span className="text-sm text-red-600 font-medium mb-2">

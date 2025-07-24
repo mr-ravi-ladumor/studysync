@@ -13,8 +13,8 @@ const router = Router();
 
 router.route('/').post(verifyAuthToken, createCalendarEvent);
 router.route('/').get(verifyAuthToken,  getAllCalendarEvents);
-router.route('/:calendarId').get(verifyAuthToken, getCalendarEventById);
-router.route('/update/:calendarId').put(verifyAuthToken, updateCalendarEvent);
-router.route('/delete/:calendarId').delete(verifyAuthToken, deleteCalendarEvent);
+router.route('/:eventId').get(verifyAuthToken, getCalendarEventById);
+router.route('/update/:eventId').put(verifyAuthToken, updateCalendarEvent);
+router.route('/delete/:eventId').delete(verifyAuthToken, deleteCalendarEvent);
 
 export default router;

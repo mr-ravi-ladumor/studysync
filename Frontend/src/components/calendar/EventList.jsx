@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { CalendarIcon, Pencil, Trash2 } from "lucide-react";
-import { format, isSameDay, isToday, isTomorrow, parseISO , differenceInCalendarDays} from "date-fns";
+import { format, isSameDay, isToday, isTomorrow , differenceInCalendarDays} from "date-fns";
+import EditEvent from "./EditEvent.jsx";
+import DeleteEvent from "./DeleteEvent.jsx";
 
 const formatRange = (startDate, endDate) => {
 
@@ -56,6 +58,9 @@ const getRelativeDayLabel = (startDate) => {
 };
 
 function EventList({ calendarEvents, setCalendarEvents }) {
+    const [showEditEvent, setShowEditEvent] = useState(false);
+    const [showDeleteEvent, setShowDeleteEvent] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
     if (calendarEvents.length) {
         const d = calendarEvents[0].endDateTime;
     }
@@ -130,13 +135,23 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                                 </p>
                             </div>
                             <div className="flex gap-4 items-center">
-                                <span className="flex gap-0 items-center">
+                                <span 
+                                    onClick={() => {
+                                        setSelectedEvent(event);
+                                        setShowEditEvent(true);
+                                    }}
+                                    className="flex gap-0 items-center">
                                     <Pencil className="h-4 w-4 text-gray-700" />
                                     <button className="text-gray-800 mx-2 text-[14px]  rounded">
                                         Edit
                                     </button>
                                 </span>
-                                <span className="flex items-center">
+                                <span
+                                    onClick={() => {
+                                        setSelectedEvent(event);
+                                        setShowDeleteEvent(true);
+                                    }} 
+                                    className="flex items-center">
                                     <Trash2 className="h-4 w-4 text-red-600" />
                                     <button className="text-red-600 mx-2 text-[14px]  rounded">
                                         Delete
@@ -147,34 +162,22 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                     </div>
                 ))
             )}
-            {/* <div className="flex  items-start  gap-5 rounded-lg border-1 border-gray-300 bg-gray-50 px-4 pt-3 pb-1">
-            <div className="mt-1">
-                <span className=""><CalendarIcon className="bg-purple-500 text-white rounded-md p-1 h-8 w-8" /></span>
-            </div>
-            <div className="flex flex-col gap-2 w-full">
-                <div className="flex flex-col justify-between w-full">
-                    <div className="flex justify-between items-center">
-                        <h3 className="font-medium text-black">Mid-Term Exam</h3>
-                        <span className="text-purple-600 text-[15px] bg-purple-200 px-1 rounded-sm ">Today</span>
-                    </div>
-                    <span className="text-[15px] text-gray-800">Today, 10:00AM - 12:00 PM</span>
-                </div>
-                <div>
-                    <p className="text-[15px] text-gray-800">Location: Science Building, Room 302</p>
-                </div>
-                <div className="flex gap-4 items-center">
-                    <span
-                        className="flex gap-0 items-center">
-                        <Pencil className="h-4 w-4 text-gray-700" />
-                        <button className="text-gray-800 mx-2 text-[14px]  rounded">Edit</button>
-                    </span>
-                    <span className="flex items-center">
-                        <Trash2 className="h-4 w-4 text-red-600" />
-                        <button className="text-red-600 mx-2 text-[14px]  rounded">Delete</button>
-                    </span>
-                </div>
-            </div>
-        </div> */}
+            {/* Edit Event */}
+            {showEditEvent && (
+                <EditEvent
+
+                />
+            )}
+
+            {/* Delete Event */}
+            {showDeleteEvent && (
+                <DeleteEvent
+                    eventId={selectedEvent._id}
+                    setCalendarEvents={setCalendarEvents}
+                    setSelectedEvent={setSelectedEvent}
+                    setShowDeleteEvent={setShowDeleteEvent}
+                />
+            )}
         </div>
     );
 }

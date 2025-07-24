@@ -58,9 +58,9 @@ const getAllCalendarEvents = asyncHandler(async (req, res) => {
 });
 
 const getCalendarEventById = asyncHandler(async (req, res) => {
-    const { calendarId } = req.params;
+    const { eventId } = req.params;
     const event = await Calendar.findById({
-        _id: calendarId,
+        _id: eventId,
         owner: req.user._id,
     });
 
@@ -74,8 +74,8 @@ const getCalendarEventById = asyncHandler(async (req, res) => {
 });
 
 const updateCalendarEvent = asyncHandler(async (req, res) => {
-    const { calendarId } = req.params;
-    if (!calendarId) {
+    const { eventId } = req.params;
+    if (!eventId) {
         throw new ApiError(400, "Calendar Event Id is required");
     }
     const {
@@ -98,8 +98,8 @@ const updateCalendarEvent = asyncHandler(async (req, res) => {
         throw new ApiError(400, "End DateTime must be after Start DateTime");
     }
 
-    const updatedEvent = await findOneAndUpdate(
-        { _id: calendarId, owner: req.user._id },
+    const updatedEvent = await Calendar.findOneAndUpdate(
+        { _id: eventId, owner: req.user._id },
         { title, description, startDateTime, endDateTime, location, category },
         { new: true }
     );
@@ -121,13 +121,13 @@ const updateCalendarEvent = asyncHandler(async (req, res) => {
 });
 
 const deleteCalendarEvent = asyncHandler(async (req, res) => {
-    const { calendarId } = req.params;
-    if (!calendarId) {
+    const { eventId } = req.params;
+    if (!eventId) {
         throw new ApiError(400, "Calendar Event Id is required");
     }
 
-    const deletedEvent = await findOneAndDelete({
-        _id: calendarId,
+    const deletedEvent = await Calendar.findOneAndDelete({
+        _id: eventId,
         owner: req.user._id,
     });
 

@@ -29,27 +29,6 @@ const localizer = dateFnsLocalizer({
     locales,
 });
 
-// const events = [
-//     {
-//         title: "Conference",
-//         start: new Date(2025, 6, 20, 10, 0, 0), // July 20, 2025
-//         end: new Date(2025, 6, 20, 11, 0, 0),
-//         resource: "conference",
-//     },
-//     {
-//         title: "Team Meeting",
-//         start: new Date(2025, 6, 21, 14, 0, 0), // July 21, 2025
-//         end: new Date(2025, 6, 21, 15, 0, 0),
-//         resource: "meeting",
-//     },
-//     // Add more events for testing
-//     {
-//         title: "Study Session",
-//         start: new Date(2025, 6, 22, 9, 0, 0), // July 22, 2025
-//         end: new Date(2025, 6, 22, 11, 0, 0),
-//         resource: "study",
-//     },
-// ];
 
 // Custom Toolbar Component
 const CustomToolbar = (toolbar) => {
