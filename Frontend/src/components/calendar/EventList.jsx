@@ -61,10 +61,7 @@ function EventList({ calendarEvents, setCalendarEvents }) {
     const [showEditEvent, setShowEditEvent] = useState(false);
     const [showDeleteEvent, setShowDeleteEvent] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
-    if (calendarEvents.length) {
-        const d = calendarEvents[0].endDateTime;
-    }
-
+    
     useEffect(() => {
         const fetchCalendarEvents = async () => {
             try {
@@ -165,7 +162,10 @@ function EventList({ calendarEvents, setCalendarEvents }) {
             {/* Edit Event */}
             {showEditEvent && (
                 <EditEvent
-
+                    eventData={selectedEvent}
+                    setShowEditEvent={setShowEditEvent}
+                    setSelectedEvent={setSelectedEvent}
+                    setCalendarEvents={setCalendarEvents}
                 />
             )}
 

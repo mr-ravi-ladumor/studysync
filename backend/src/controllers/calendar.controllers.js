@@ -75,7 +75,7 @@ const getCalendarEventById = asyncHandler(async (req, res) => {
 
 const updateCalendarEvent = asyncHandler(async (req, res) => {
     const { eventId } = req.params;
-    console.log("Updating event with ID:", eventId);
+    
     if (!eventId) {
         throw new ApiError(400, "Calendar Event Id is required");
     }
@@ -88,14 +88,6 @@ const updateCalendarEvent = asyncHandler(async (req, res) => {
         category,
     } = req.body;
 
-    console.log("Request body for update:", {
-        title,
-        description,
-        startDateTime,
-        endDateTime,
-        location,
-        category,
-    })
 
     if (!title || !startDateTime || !endDateTime || !category) {
         throw new ApiError(404,"Title, Start DateTime, End DateTime, and Category are required");

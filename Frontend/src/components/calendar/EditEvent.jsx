@@ -1,15 +1,16 @@
 import React, {useState} from 'react'
 
-function EditEvent({ setShowEditEvent }) {
+function EditEvent({eventData, setShowEditEvent , setSelectedEvent, setCalendarEvents}) {
+    
     const [eventForm, setEventForm] = useState({
-        eventTitle: '',
-        eventStartDate: '',
-        eventStartTime: '',
-        eventEndDate: '',
-        eventEndTime: '',
-        eventCategory: '',
-        eventLocation: '',
-        eventDescription: ''
+        eventTitle: eventData.title,
+        eventStartDate: eventData.startDateTime.toLocaleDateString('sv'), 
+        eventStartTime: eventData.startDateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}),
+        eventEndDate: eventData.endDateTime.toLocaleDateString('sv'),
+        eventEndTime: eventData.endDateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}),
+        eventCategory: eventData.category,
+        eventLocation: eventData.location || '',
+        eventDescription: eventData.description || ''
     });
 
     const [error, setError] = useState('');
@@ -68,8 +69,8 @@ function EditEvent({ setShowEditEvent }) {
         if (!onValidateEventForm()) return;
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/calendar`,{
-                method: 'POST',
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/calendar/update/${eventData._id}`,{
+                method: 'PUT',
                 credentials: "include",
                 headers: {
                     'Content-Type' : 'application/json',
@@ -84,16 +85,29 @@ function EditEvent({ setShowEditEvent }) {
                 })
             })
 
-            const eventData = await response.json();
+            const updatedEventData = await response.json();
 
             if (!response.ok) {
-                console.log("Error updating event:", eventData);
-                setError(eventData.message || 'Failed to updating event. Please try again.');
+                console.log("Error updating event:", updatedEventData.data);
+                setError(updatedEventData.message || 'Failed to updating event. Please try again.');
+                return;
             }
 
-            console.log("Event updated successfully:", eventData);
+            console.log("Event updated successfully:", updatedEventData.data);
             setError('');
+            setSelectedEvent(null);
+            
+            setCalendarEvents((prevEvents) => 
+                prevEvents.map((event) => {
+                    return event._id === updatedEventData.data._id ? {
+                        ...updatedEventData.data,
+                        startDateTime: new Date(updatedEventData.data.startDateTime),
+                        endDateTime: new Date(updatedEventData.data.endDateTime)
+                    } : event;
+                })
+            );
             setShowEditEvent(false);
+
         } catch (error) {
             console.log("Network Error updating event:", error);
             setError('Failed to update event. Please try again later.');
@@ -260,7 +274,7 @@ function EditEvent({ setShowEditEvent }) {
                 onClick={onSubmitEditEvent}
                 className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
               >
-                Add event
+                Update event
               </button>
             </div>
           </form>
