@@ -14,7 +14,7 @@ function Dashboard() {
     }
 
     return (
-        <div className="h-screen flex flex-col gap-5 ">
+        <div className="h-screen flex flex-col gap-5 " >
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
                     <h3 className="text-2xl font-medium">Dashboard</h3>

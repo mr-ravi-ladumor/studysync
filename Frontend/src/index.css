@@ -141,7 +141,7 @@
 .rbc-date-cell.rbc-today {
     background: #dcfce7;
     background-color: #dcfce7;
-    color: #1db454; 
+    color: #1db454;
 }
 
 .rbc-now {
@@ -162,16 +162,15 @@
     border-radius: 8px;
 }
 
-.rbc-month-row{
+.rbc-month-row {
     /* border: 2px solid #1db454; */
 }
 
 .rbc-events-container {
 }
 
-.rbc-row-bg{
+.rbc-row-bg {
     /* background: #0953e8; */
-    
 }
 
 /* Event Bars */
@@ -219,12 +218,11 @@
     display: flex;
     gap: 8px;
 }
-.rbc-day-bg.rbc-today{
+.rbc-day-bg.rbc-today {
     background-color: #dcfce7;
     /* border: 2px solid #22c55e; */
 }
 .rbc-day-bg {
-    
 }
 
 /* Removed duplicate .rbc-event rule that was breaking month view */
@@ -242,4 +240,51 @@
     color: rgb(67, 67, 67);
     text-transform: capitalize;
 }
+/* Theme variables */
+:root {
+    --app-bg: #ffffff;
+    --app-text: #111827; /* gray-900 */
+    --card-bg: #ffffff;
+    --muted: #6b7280;
+    --primary: #22c55e;
+}
 
+
+/* Apply variables to body and common elements */
+html,
+body,
+#root {
+    background-color: var(--app-bg);
+    color: var(--app-text);
+}
+
+/* Calendar overrides to use variables where appropriate */
+.rbc-calendar,
+.rbc-month-view,
+.rbc-event-calendar {
+    background: var(--card-bg);
+}
+
+.rbc-toolbar-label {
+    color: var(--app-text);
+}
+
+.rbc-btn-group button {
+    color: var(--app-text);
+    background: transparent;
+}
+
+.rbc-btn-group button:hover,
+.rbc-btn-group .rbc-active {
+    background: var(--primary);
+    color: #fff;
+}
+
+.rbc-header {
+    color: var(--muted);
+    background: transparent;
+}
+
+.rbc-event {
+    background: linear-gradient(90deg, var(--primary), #10b981 80%);
+}

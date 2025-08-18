@@ -1,11 +1,6 @@
-import React, { useMemo , useState} from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import {
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-} from "date-fns";
+import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -28,7 +23,6 @@ const localizer = dateFnsLocalizer({
     getDay,
     locales,
 });
-
 
 // Custom Toolbar Component
 const CustomToolbar = (toolbar) => {
@@ -100,7 +94,6 @@ const CustomToolbar = (toolbar) => {
 };
 
 function MyCalendar(props) {
-    
     const handleSelectEvent = (event) => {
         console.log("Event clicked:", event);
     };
@@ -109,24 +102,31 @@ function MyCalendar(props) {
         console.log("Date clicked:", slotInfo.startDateTime);
     };
 
-    
     const today = useMemo(() => {
-        return new Date(Date.now()); 
-    },[])
+        return new Date(Date.now());
+    }, []);
 
     const eventPropGetter = (event) => {
         const category = event.category || "default";
         const colorMap = {
-            work: "#3b82f6",      // Blue
-            study: "#22c55e",     // Green  
-            personal: "#8b5cf6",  // Purple
-            meeting: "#f59e0b",   // Orange
-            other: "#6b7280",     // Gray
-            default: "#3b82f6"    // Blue
+            work: "#3b82f6", // Blue
+            study: "#22c55e", // Green
+            personal: "#8b5cf6", // Purple
+            meeting: "#f59e0b", // Orange
+            other: "#6b7280", // Gray
+            default: "#3b82f6", // Blue
         };
         const backgroundColor = colorMap[category] || colorMap.default;
         return { style: { backgroundColor } };
     };
+    // make the calendar's view controlled so it follows appearance settings updates
+    const [view, setView] = useState(props.defaultView || "month");
+
+    React.useEffect(() => {
+        if (props.defaultView && props.defaultView !== view)
+            setView(props.defaultView);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.defaultView]);
 
     return (
         <>
@@ -135,7 +135,8 @@ function MyCalendar(props) {
                 events={props.events}
                 startAccessor="startDateTime"
                 endAccessor="endDateTime"
-                defaultView="month"
+                view={view}
+                onView={(v) => setView(v)}
                 views={["month", "week", "day", "agenda"]}
                 onSelectEvent={handleSelectEvent}
                 onSelectSlot={handleSelectSlot}
@@ -144,7 +145,7 @@ function MyCalendar(props) {
                 showMultiDayTimes
                 step={60}
                 defaultDate={today}
-                getNow={() => today} 
+                getNow={() => today}
                 components={{
                     toolbar: CustomToolbar,
                 }}
@@ -165,6 +166,7 @@ function MyCalendar(props) {
 function Calender() {
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [showAddEvent, setShowAddEvent] = useState(false);
+    const defaultView = "month";
 
     return (
         <div className="h-screen flex flex-col gap-5 ">
@@ -176,22 +178,20 @@ function Calender() {
                     </p>
                 </div>
                 <button
+                    type="button"
                     onClick={() => setShowAddEvent(!showAddEvent)}
-                    className=" bg-green-500 text-white px-4 py-1 rounded-lg flex items-center gap-2 justify-cente hover:bg-green-600 transition-colors duration-300 shadow-lg">
+                    className=" bg-green-500 text-white px-4 py-1 rounded-lg flex items-center gap-2 justify-center hover:bg-green-600 transition-colors duration-300 shadow-lg"
+                >
                     <span className="text-2xl mb-1">+</span> Add Event
                 </button>
-                {
-                    showAddEvent && (
-                        <AddEvent setShowAddEvent={setShowAddEvent} />
-                    )
-                }
+                {showAddEvent && <AddEvent setShowAddEvent={setShowAddEvent} />}
             </div>
             <div className="bg-white rounded-lg border-1 border-gray-200 p-4">
-                <MyCalendar events={calendarEvents} />
+                <MyCalendar events={calendarEvents} defaultView={defaultView} />
             </div>
             <div className="bg-white rounded-xl px-5 py-4 mt-4 border-1 border-gray-200">
-                <EventList 
-                    calendarEvents={calendarEvents} 
+                <EventList
+                    calendarEvents={calendarEvents}
                     setCalendarEvents={setCalendarEvents}
                 />
             </div>
