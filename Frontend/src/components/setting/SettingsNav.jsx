@@ -4,7 +4,6 @@ function SettingsNav({ active, setActive }) {
     const options = [
         { key: 1, value: "Account" },
         { key: 2, value: "Change Password" },
-        { key: 3, value: "Notifications" },
     ];
     return (
         <div className="sticky top-1">

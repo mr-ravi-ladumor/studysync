@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import DangerZone from "./DangerZone";
 
 // Simple theme toggle utility
 const getStoredTheme = () => {
@@ -207,69 +208,7 @@ function Account() {
                 </div>
             </div>
 
-            {/* Account Information Section */}
-            <div className="bg-white rounded-lg  p-6 w-full">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    Account Information
-                </h3>
-                {/* Theme Toggle */}
-                <div className="mb-4">
-                    <label className="block text-md font-medium text-gray-700 mb-2">
-                        Appearance
-                    </label>
-                    <div className="flex items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={() => setTheme("dark")}
-                            className={`px-3 py-1 rounded ${
-                                theme === "dark"
-                                    ? "bg-green-600 text-white"
-                                    : "bg-gray-100 text-gray-700"
-                            }`}
-                        >
-                            Dark
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setTheme("light")}
-                            className={`px-3 py-1 rounded ${
-                                theme === "light"
-                                    ? "bg-green-600 text-white"
-                                    : "bg-gray-100 text-gray-700"
-                            }`}
-                        >
-                            Light
-                        </button>
-                    </div>
-                </div>
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                        <div>
-                            <p className="text-md font-medium text-gray-900">
-                                Account Status
-                            </p>
-                            <p className="text-md text-gray-500">
-                                Your account is active
-                            </p>
-                        </div>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Active
-                        </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                        <div>
-                            <p className="text-md font-medium text-gray-900">
-                                Member Since
-                            </p>
-                            <p className="text-md text-gray-500">
-                                January 2024
-                            </p>
-                        </div>
-                    </div>
-                    {/* delete account */}
-                    <div></div>
-                </div>
-            </div>
+            <DangerZone />
         </div>
     );
 }
