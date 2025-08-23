@@ -1,117 +1,158 @@
 import React, { useState } from "react";
 
 function UpdateTask({
-  taskData,
-  setTasks,
-  setShowUpdateTask,
-  setSelectedTask,
+    taskData,
+    setTasks,
+    setShowUpdateTask,
+    setSelectedTask,
 }) {
+    const [task, setTask] = useState({
+        title: taskData.title || "",
+        description: taskData.description || "",
+        dueDate: taskData.dueDate ? taskData.dueDate.split("T")[0] : "",
+        priority: taskData.priority || "medium",
+    });
 
-  const [task, setTask] = useState({
-    title: taskData.title,
-    description: taskData.description,
-  });
-  const onSubmitUpdateTask = async (e) => {
-    e.preventDefault();
+    const onSubmitUpdateTask = async (e) => {
+        e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/tasks/updateTask/${
-          taskData._id
-        }`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(task),
-        }
-      );
-
-      const updatedTask = await response.json();
-      if (!response.ok) {
-        throw new Error(updatedTask.message || "Failed to Update task");
-      }
-      // console.log("Task Updates successfully:", updatedTask.data);
-      setTask({
-        title: "",
-        description: "",
-      });
-
-      setShowUpdateTask(false);
-      setSelectedTask(null);
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task._id === updatedTask.data._id ? updatedTask.data : task
-        )
-      );
-
-      alert("Task Updated successfully!");
-    } catch (error) {
-      console.error("Error Updating task:", error);
-      alert("Failed to Update task. Please try again.");
-    }
-  };
-  return (
-    <>
-      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-        <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
-          <h3 className="text-xl font-medium mb-2">Update Task</h3>
-          <p className="text-gray-600 mb-6 border-b pb-5 border-gray-300">
-            Please Update the details of your task below.
-          </p>
-          <form className="flex flex-col gap-2" onSubmit={onSubmitUpdateTask}>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="" className="block ">
-                Task Title
-              </label>
-              <input
-                type="text"
-                name="taskTitle"
-                value={task.title}
-                onChange={(e) => setTask({ ...task, title: e.target.value })}
-                placeholder="Enter Task Title..."
-                required
-                className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="" className="">
-                Task Description
-              </label>
-              <textarea
-                name="taskDescription"
-                rows="4"
-                value={task.description}
-                onChange={(e) =>
-                  setTask({ ...task, description: e.target.value })
+        try {
+            const res = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/api/tasks/updateTask/${
+                    taskData._id
+                }`,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        title: task.title,
+                        description: task.description,
+                        dueDate: task.dueDate || undefined,
+                        priority: task.priority || undefined,
+                    }),
                 }
-                placeholder="Enter Task Description..."
-                className="w-full mb-4 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 "
-              />
+            );
+
+            const payload = await res.json();
+            if (!res.ok)
+                throw new Error(payload.message || "Failed to update task");
+
+            // update local list
+            setTasks((prev) =>
+                prev.map((t) => (t._id === payload.data._id ? payload.data : t))
+            );
+
+            // close modal
+            setShowUpdateTask(false);
+            setSelectedTask(null);
+        } catch (err) {
+            console.error("Update Task error:", err);
+            alert("Failed to update task. Please try again.");
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+                <h3 className="text-xl font-medium mb-2">Update Task</h3>
+                <p className="text-gray-600 mb-4">
+                    Edit the fields below and click Update.
+                </p>
+
+                <form
+                    className="flex flex-col gap-3"
+                    onSubmit={onSubmitUpdateTask}
+                >
+                    <div>
+                        <label className="block text-sm mb-1">Title</label>
+                        <input
+                            value={task.title}
+                            onChange={(e) =>
+                                setTask({ ...task, title: e.target.value })
+                            }
+                            required
+                            className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm mb-1">
+                            Description
+                        </label>
+                        <textarea
+                            rows={3}
+                            value={task.description}
+                            onChange={(e) =>
+                                setTask({
+                                    ...task,
+                                    description: e.target.value,
+                                })
+                            }
+                            className="w-full mb-4 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                    </div>
+
+                    <div className="flex gap-4">
+                        <div className="flex-1">
+                            <label className="block text-sm mb-1">
+                                Due Date
+                            </label>
+                            <input
+                                type="date"
+                                value={task.dueDate}
+                                onChange={(e) =>
+                                    setTask({
+                                        ...task,
+                                        dueDate: e.target.value,
+                                    })
+                                }
+                                className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            />
+                        </div>
+                        <div className="w-36">
+                            <label className="block text-sm mb-1">
+                                Priority
+                            </label>
+                            <select
+                                value={task.priority}
+                                onChange={(e) =>
+                                    setTask({
+                                        ...task,
+                                        priority: e.target.value,
+                                    })
+                                }
+                                className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            >
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end gap-2 mt-2">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setShowUpdateTask(false);
+                                setSelectedTask(null);
+                            }}
+                            className="px-4 py-2 rounded bg-gray-200"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="px-4 py-2 rounded bg-green-600 text-white"
+                        >
+                            Update
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setShowUpdateTask(false)}
-                className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300
-                          transition-colors duration-300 "
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
-              >
-                Update
-              </button>
-            </div>
-          </form>
         </div>
-      </div>
-    </>
-  );
+    );
 }
 
 export default UpdateTask;

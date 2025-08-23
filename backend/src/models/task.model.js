@@ -1,36 +1,47 @@
-import mongoose , {Schema, model} from 'mongoose';
+import mongoose, { Schema, model } from "mongoose";
 
 const taskSchema = new Schema(
     {
-        title : {
-            type : String,
-            required: [true, 'Title is required'],
+        title: {
+            type: String,
+            required: [true, "Title is required"],
             trim: true,
-            minLength: [3, 'Title must be at least 3 characters long'],
-            maxlength: [100, 'Title cannot exceed 100 characters']
+            minLength: [3, "Title must be at least 3 characters long"],
+            maxlength: [100, "Title cannot exceed 100 characters"],
         },
-        description : {
-            type : String,
+        description: {
+            type: String,
             trim: true,
-            maxlength: [1000, 'Description cannot exceed 500 characters']
+            maxlength: [1000, "Description cannot exceed 500 characters"],
         },
-        status : {
-            type : String,
-            enum: ['pending', 'completed', 'in-progress', 'overdue'],
-            default: 'pending'
+        dueDate: {
+            type: Date,
+            default: null,
         },
-        // *due date
-        owner : {
+        priority: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium",
+        },
+        status: {
+            type: String,
+            enum: ["pending", "completed", "in-progress", "overdue"],
+            default: "pending",
+        },
+        dueDate: {
+            type: Date,
+            required: [true, "Due date is required"],
+        },
+        owner: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: [true, 'Owner is required']
-
-        }
+            ref: "User",
+            required: [true, "Owner is required"],
+        },
     },
     {
         timestamps: true,
-        versionKey: false
+        versionKey: false,
     }
-)
+);
 
-export const Task = model('Task', taskSchema);
+export const Task = model("Task", taskSchema);

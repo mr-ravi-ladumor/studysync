@@ -1,77 +1,80 @@
 import mongoose, { Schema, model } from "mongoose";
 
 const resourceSchema = new Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 3,
-      maxlength: 80,
-    },
+    {
+        title: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 3,
+            maxlength: 80,
+        },
 
-    originalFileName: {
-      type: String,
-      required: function () {
-        return this.resourceType !== "link";
-      },
-    },
+        originalFileName: {
+            type: String,
+            required: function () {
+                return this.resourceType !== "link";
+            },
+        },
 
-    resourceType: {
-      type: String,
-      required: true,
-      enum: ["document", "image", "link", "video", "other"],
-    },
+        resourceType: {
+            type: String,
+            required: true,
+            enum: ["document", "image", "link", "video", "other"],
+        },
 
-    subject: {
-      type: String,
-      required: true,
-    },
+        subject: {
+            type: String,
+            required: true,
+        },
 
-    fileUrl: {
-      type: String, // Cloudinary URL
-      required: function () {
-        return this.resourceType !== "link";
-      },
-    },
+        fileUrl: {
+            type: String, // Cloudinary URL
+            required: function () {
+                return this.resourceType !== "link";
+            },
+        },
 
-    link: {
-      type: String, // External link
-      required: function () {
-        return this.resourceType === "link";
-      },
-    },
+        link: {
+            type: String, // External link
+            required: function () {
+                return this.resourceType === "link";
+            },
+        },
 
-    publicId: {
-      type: String,
-      required: function () {
-        return this.resourceType !== "link";
-      },
-    },
+        publicId: {
+            type: String,
+            required: function () {
+                return this.resourceType !== "link";
+            },
+        },
 
-    mimeType: {
-      type: String,
-      required: true,
-    },
+        mimeType: {
+            type: String,
+            required: true,
+        },
 
-    size: {
-      type: Number,
-      required: function () {
-        return this.resourceType !== "link";
-      },
-      max: 10 * 1024 * 1024, //  Max 10MB
-    },
+        size: {
+            type: Number,
+            required: function () {
+                return this.resourceType !== "link";
+            },
+            max: 10 * 1024 * 1024, //  Max 10MB
+        },
 
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
     },
-  },
-  {
-    timestamps: true,
-  }
+    {
+        timestamps: true,
+    }
 );
 
 const Resource = model("Resource", resourceSchema);
 export default Resource;
+
+// index to speed up queries that filter by owner and group/distinct by subject
+resourceSchema.index({ owner: 1, subject: 1 });
