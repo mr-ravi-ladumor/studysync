@@ -3,14 +3,14 @@ import ResourceCards from "../components/resources/ResourceCards.jsx";
 import { useEffect } from "react";
 import AddResource from "../components/resources/AddResource.jsx";
 import EditResource from "../components/resources/EditResource.jsx";
+import ViewResource from "../components/resources/ViewResource.jsx";
 
 const filterChips = [
     { label: "All Resources", value: "all" },
-    { label: "Documents", value: "documents" },
-    { label: "Images", value: "images" },
-    { label: "Links", value: "links" },
-    { label: "Notes", value: "notes" },
-    { label: "Others", value: "others" },
+    { label: "Documents", value: "document" },
+    { label: "Images", value: "image" },
+    { label: "Links", value: "link" },
+    { label: "Other", value: "other" },
 ];
 
 function Resources() {
@@ -18,6 +18,8 @@ function Resources() {
     const [showEditResource, setShowEditResource] = useState(false);
     const [selectedResource, setSelectedResource] = useState(null);
     const [resources, setResources] = useState([]);
+    const [activeFilter, setActiveFilter] = useState("all");
+    const [viewing, setViewing] = useState(null);
 
     useEffect(() => {
         // Fetch resources from the backend when the component mounts
@@ -48,8 +50,7 @@ function Resources() {
     }, []);
 
     const handleView = (resource) => {
-        console.log("View resource:", resource);
-        // TODO: implement view modal
+        setViewing(resource);
     };
 
     const handleEdit = (resource) => {
@@ -131,23 +132,41 @@ function Resources() {
             <div className="filter-chips">
                 <div className="ml-1 mt-3 chip flex items-center gap-5 ">
                     {filterChips.map((chip) => (
-                        <span
+                        <button
                             key={chip.value}
-                            className="text-[15px] text-gray-800 bg-gray-200 rounded-3xl py-[5px] px-[10px] text-center hover:bg-gray-300 focus:bg-green-500 transition-bg duration-200"
+                            type="button"
+                            onClick={() => setActiveFilter(chip.value)}
+                            className={`text-[15px] text-gray-800 rounded-3xl py-[5px] px-[10px] text-center transition-colors duration-200 ${
+                                activeFilter === chip.value
+                                    ? "bg-green-500 text-white"
+                                    : "bg-gray-200 hover:bg-gray-300"
+                            }`}
                         >
                             {chip.label}
-                        </span>
+                        </button>
                     ))}
                 </div>
             </div>{" "}
             <div className="mt-4 cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <ResourceCards
-                    resources={resources}
+                    resources={
+                        activeFilter === "all"
+                            ? resources
+                            : resources.filter(
+                                  (r) => r.resourceType === activeFilter
+                              )
+                    }
                     onView={handleView}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                 />
             </div>
+            {viewing && (
+                <ViewResource
+                    resource={viewing}
+                    onClose={() => setViewing(null)}
+                />
+            )}
             <div className="pagination"></div>
         </div>
     );
