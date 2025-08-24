@@ -1,49 +1,59 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState('');
-    const [loading, setLoading] = useState(false);
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState("");
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         // console.log("useAuth :: AuthProvider useEffect called");
         try {
-            const authUser = localStorage.getItem('user');
+            const authUser = localStorage.getItem("user");
             // console.log("authUser", authUser)
-            if(authUser) {
+            if (authUser) {
                 // console.log("object")
                 const userData = JSON.parse(authUser);
                 setIsAuthenticated(true);
                 setUser(userData);
-            }
-            else {
-                setUser('');
+            } else {
+                setUser("");
                 setIsAuthenticated(false);
             }
         } catch (error) {
             console.log("Error retrieving user from localStorage:", error);
-            setUser('');
+            setUser("");
             setIsAuthenticated(false);
-            localStorage.removeItem('user');
+            localStorage.removeItem("user");
+        } finally {
+            setLoading(false);
         }
     }, []);
 
-    const login =  (userData) => {
+    const login = (userData) => {
         setUser(userData);
         setIsAuthenticated(true);
         setError(false);
-        localStorage.setItem('user', JSON.stringify(userData));
-    }
+        localStorage.setItem("user", JSON.stringify(userData));
+    };
 
-    const logout = async (userData) => {
-        setUser('');
-        setIsAuthenticated(false);
-        setError(false);
-        localStorage.removeItem('user');   
-    }
+    const logout = async () => {
+        try {
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
+        } catch (e) {
+            // ignore network errors; still clear client state
+        } finally {
+            setUser("");
+            setIsAuthenticated(false);
+            setError(false);
+            localStorage.removeItem("user");
+        }
+    };
 
     const value = {
         user,
@@ -55,11 +65,9 @@ export const AuthProvider = ({children}) => {
         loading,
     };
     return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+        <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+    );
+};
 
 export const useAuth = () => {
     const context = React.useContext(AuthContext);
@@ -67,4 +75,4 @@ export const useAuth = () => {
         throw new Error("useAuth must be used within an AuthProvider");
     }
     return context;
-}
+};

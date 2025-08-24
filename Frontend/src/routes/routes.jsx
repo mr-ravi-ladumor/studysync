@@ -1,9 +1,11 @@
 import React from "react";
 import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
+    Route,
+    createBrowserRouter,
+    createRoutesFromElements,
 } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 // Importing pages
 import Home from "../pages/Home.jsx";
@@ -15,22 +17,35 @@ import Resources from "../pages/Resources.jsx";
 import Calendar from "../pages/Calendar.jsx";
 import Settings from "../pages/Settings.jsx";
 
+// Simple guard for authenticated routes
+function RequireAuth({ children }) {
+    const { isAuthenticated, loading } = useAuth();
+    if (loading) return null;
+    if (!isAuthenticated) return <Navigate to="/login" replace />;
+    return children;
+}
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route>
-        <Route path="/" element={<Home/>} />
-        <Route path="/login"  element={<Login/>} />
-        <Route path="/signup" element={<Signup/>} />
+    createRoutesFromElements(
+        <Route>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
-        <Route path="/" element={<Layout/>} >
-          <Route path="dashboard" element={<Dashboard/>} />
-          <Route path="resources" element={<Resources/>} />
-          <Route path="calendar"  element={<Calendar/>} />
-          <Route path="settings"  element={<Settings/>} />
+            <Route
+                path="/"
+                element={
+                    <RequireAuth>
+                        <Layout />
+                    </RequireAuth>
+                }
+            >
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="resources" element={<Resources />} />
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="settings" element={<Settings />} />
+            </Route>
         </Route>
-    </Route>
-
-  )
+    )
 );
 export default router;
