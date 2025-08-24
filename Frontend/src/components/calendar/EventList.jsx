@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { CalendarIcon, Pencil, Trash2 } from "lucide-react";
-import { format, isSameDay, isToday, isTomorrow , differenceInCalendarDays} from "date-fns";
+import {
+    format,
+    isSameDay,
+    isToday,
+    isTomorrow,
+    differenceInCalendarDays,
+} from "date-fns";
 import EditEvent from "./EditEvent.jsx";
 import DeleteEvent from "./DeleteEvent.jsx";
 
 const formatRange = (startDate, endDate) => {
-
     let formattedString = "";
     const startTime = format(startDate, "hh:mm a");
     const endTime = format(endDate, "hh:mm a");
@@ -58,10 +63,45 @@ const getRelativeDayLabel = (startDate) => {
 };
 
 function EventList({ calendarEvents, setCalendarEvents }) {
+    const themeForCategory = (cat) => {
+        const c = (cat || "").toLowerCase();
+        switch (c) {
+            case "work":
+                return {
+                    card: "border-blue-300 bg-blue-50",
+                    dot: "bg-blue-500",
+                    badge: "bg-blue-100 text-blue-700",
+                };
+            case "study":
+                return {
+                    card: "border-emerald-300 bg-emerald-50",
+                    dot: "bg-emerald-500",
+                    badge: "bg-emerald-100 text-emerald-700",
+                };
+            case "personal":
+                return {
+                    card: "border-violet-300 bg-violet-50",
+                    dot: "bg-violet-500",
+                    badge: "bg-violet-100 text-violet-700",
+                };
+            case "meeting":
+                return {
+                    card: "border-amber-300 bg-amber-50",
+                    dot: "bg-amber-500",
+                    badge: "bg-amber-100 text-amber-700",
+                };
+            default:
+                return {
+                    card: "border-gray-300 bg-gray-50",
+                    dot: "bg-gray-500",
+                    badge: "bg-gray-100 text-gray-700",
+                };
+        }
+    };
     const [showEditEvent, setShowEditEvent] = useState(false);
     const [showDeleteEvent, setShowDeleteEvent] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
-    
+
     useEffect(() => {
         const fetchCalendarEvents = async () => {
             try {
@@ -76,10 +116,10 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                     throw new Error("Failed to fetch Events");
                 }
                 const allEventsData = await response.json();
-                const transformedEvents = allEventsData.data.map(event => ({
-                    ...event, 
+                const transformedEvents = allEventsData.data.map((event) => ({
+                    ...event,
                     startDateTime: new Date(event.startDateTime),
-                    endDateTime: new Date(event.endDateTime)
+                    endDateTime: new Date(event.endDateTime),
                 }));
                 setCalendarEvents(transformedEvents);
                 console.log("Events fetched successfully:", transformedEvents);
@@ -99,65 +139,77 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                     No Eventds yet. Click ‘Add Event’ to get started!
                 </div>
             ) : (
-                calendarEvents.map((event) => (
-                    <div
-                        key={event._id}
-                        className="flex  items-start  gap-5 rounded-lg border-1 border-green-500 bg-green-50 px-4 pt-3 pb-1"
-                    >
-                        <div className="mt-1">
-                            <span className="">
-                                <CalendarIcon className="bg-green-500 text-white rounded-md p-1 h-8 w-8" />
-                            </span>
-                        </div>
-                        <div className="flex flex-col gap-2 w-full">
-                            <div className="flex flex-col justify-between w-full">
-                                <div className="flex justify-between items-center">
-                                    <h3 className="font-medium text-black">
-                                        {event.title}
-                                    </h3>
-                                    <span className="text-green-600 text-[15px] bg-green-200 px-1 rounded-sm ">
-                                        {getRelativeDayLabel(event.startDateTime)}
+                calendarEvents.map((event) => {
+                    const theme = themeForCategory(event.category);
+                    return (
+                        <div
+                            key={event._id}
+                            className={`flex items-start gap-5 rounded-lg border ${theme.card} px-4 pt-3 pb-2`}
+                        >
+                            <div className="mt-1">
+                                <span
+                                    className={`rounded-md p-1 h-8 w-8 inline-flex items-center justify-center ${theme.dot}`}
+                                >
+                                    <CalendarIcon className="text-white h-5 w-5" />
+                                </span>
+                            </div>
+                            <div className="flex flex-col gap-2 w-full">
+                                <div className="flex flex-col justify-between w-full">
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="font-medium text-black">
+                                            {event.title}
+                                        </h3>
+                                        <span
+                                            className={`text-xs px-2 py-0.5 rounded ${theme.badge}`}
+                                        >
+                                            {getRelativeDayLabel(
+                                                event.startDateTime
+                                            )}
+                                        </span>
+                                    </div>
+                                    <span className="text-[14px] text-gray-700">
+                                        {formatRange(
+                                            event.startDateTime,
+                                            event.endDateTime
+                                        )}
                                     </span>
                                 </div>
-                                <span className="text-[15px] text-gray-800">
-                                    {formatRange(
-                                        event.startDateTime,
-                                        event.endDateTime
-                                    )}
-                                </span>
-                            </div>
-                            <div>
-                                <p className="text-[15px] text-gray-800">
-                                    Location: {event.location || "Not specified"}
-                                </p>
-                            </div>
-                            <div className="flex gap-4 items-center">
-                                <span 
-                                    onClick={() => {
-                                        setSelectedEvent(event);
-                                        setShowEditEvent(true);
-                                    }}
-                                    className="flex gap-0 items-center">
-                                    <Pencil className="h-4 w-4 text-gray-700" />
-                                    <button className="text-gray-800 mx-2 text-[14px]  rounded">
-                                        Edit
+                                <div className="flex flex-wrap gap-2 items-center text-[14px] text-gray-700">
+                                    <span className="">
+                                        Location:{" "}
+                                        {event.location || "Not specified"}
+                                    </span>
+                                </div>
+                                <div className="flex gap-4 items-center">
+                                    <button
+                                        onClick={() => {
+                                            setSelectedEvent(event);
+                                            setShowEditEvent(true);
+                                        }}
+                                        className="flex gap-1 items-center text-gray-800 hover:text-black"
+                                    >
+                                        <Pencil className="h-4 w-4" />
+                                        <span className="text-[14px]">
+                                            Edit
+                                        </span>
                                     </button>
-                                </span>
-                                <span
-                                    onClick={() => {
-                                        setSelectedEvent(event);
-                                        setShowDeleteEvent(true);
-                                    }} 
-                                    className="flex items-center">
-                                    <Trash2 className="h-4 w-4 text-red-600" />
-                                    <button className="text-red-600 mx-2 text-[14px]  rounded">
-                                        Delete
+                                    <button
+                                        onClick={() => {
+                                            setSelectedEvent(event);
+                                            setShowDeleteEvent(true);
+                                        }}
+                                        className="flex gap-1 items-center text-red-600 hover:text-red-700"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                        <span className="text-[14px]">
+                                            Delete
+                                        </span>
                                     </button>
-                                </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))
+                    );
+                })
             )}
             {/* Edit Event */}
             {showEditEvent && (

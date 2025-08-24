@@ -11,14 +11,7 @@
 }
 
 /* Calendar Container */
-.rbc-calendar {
-    /* background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    padding: 24px;
-    border: none;
-    font-family: inherit; */
-}
+/* .rbc-calendar container defaults kept */
 
 .rbc-event-calendar {
     background: #f3f4f6; /* Light gray background */
@@ -139,39 +132,26 @@
 /* Today Highlight */
 .rbc-today,
 .rbc-date-cell.rbc-today {
-    background: #dcfce7;
-    background-color: #dcfce7;
-    color: #1db454;
+    background: #f0fdf4; /* subtle green tint for today */
+    color: inherit;
 }
 
-.rbc-now {
-    background-color: #dcfce7;
-}
-
-.rbc-current {
-    color: #1db454;
-}
-
+/* Do not force background/text on the day number; keep it clean */
 .rbc-today button,
 .rbc-today a,
 .rbc-date-cell.rbc-today button,
 .rbc-date-cell.rbc-today a {
-    background: #22c55e !important;
-    color: #e72020 !important;
-    font-weight: 700;
-    border-radius: 8px;
+    background: transparent !important;
+    color: inherit !important;
+    font-weight: 600;
+    border-radius: 6px;
 }
 
-.rbc-month-row {
-    /* border: 2px solid #1db454; */
-}
+/* .rbc-month-row */
 
-.rbc-events-container {
-}
+/* .rbc-events-container */
 
-.rbc-row-bg {
-    /* background: #0953e8; */
-}
+/* .rbc-row-bg */
 
 /* Event Bars */
 
@@ -219,11 +199,9 @@
     gap: 8px;
 }
 .rbc-day-bg.rbc-today {
-    background-color: #dcfce7;
-    /* border: 2px solid #22c55e; */
+    background-color: #f0fdf4;
 }
-.rbc-day-bg {
-}
+/* .rbc-day-bg */
 
 /* Removed duplicate .rbc-event rule that was breaking month view */
 
@@ -235,10 +213,10 @@
 
 .rbc-label {
     border: none;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: rgb(67, 67, 67);
-    text-transform: capitalize;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6b7280; /* gray-500 */
+    text-transform: none;
 }
 /* Theme variables */
 :root {
@@ -248,7 +226,6 @@
     --muted: #6b7280;
     --primary: #22c55e;
 }
-
 
 /* Apply variables to body and common elements */
 html,
@@ -276,8 +253,13 @@ body,
 
 .rbc-btn-group button:hover,
 .rbc-btn-group .rbc-active {
-    background: var(--primary);
+    background: #111827; /* neutral dark */
     color: #fff;
+}
+
+.rbc-btn-group button:hover {
+    background: #f3f4f6; /* light gray hover */
+    color: #111827;
 }
 
 .rbc-header {
@@ -285,6 +267,7 @@ body,
     background: transparent;
 }
 
+/* Allow inline eventPropGetter to control colors; do not force background here */
 .rbc-event {
-    background: linear-gradient(90deg, var(--primary), #10b981 80%);
+    background: unset;
 }
