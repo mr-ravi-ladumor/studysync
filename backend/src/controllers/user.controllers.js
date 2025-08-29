@@ -3,6 +3,9 @@ import ApiError from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import {User} from '../models/user.model.js';
 import { generateJwtTokens } from '../utils/jwt.js';
+import { Task } from '../models/task.model.js';
+import { Resource } from '../models/resource.model.js';
+import { Calendar } from '../models/calendar.model.js';
 
 const userRegister = asyncHandler(async (req, res) => {
     // get user data from request body
@@ -202,19 +205,25 @@ const changePassword = asyncHandler(async (req, res) => {
     )
 })
 
-const deleteUser = asyncHandler(async(req,res) => {
+
+const deleteUser = asyncHandler(async (req, res) => {
     const userId = req.user._id;
+    
+    await Promise.all([
+        Task.deleteMany({ owner: userId }),
+        Resource.deleteMany({ owner: userId }),
+        Calendar.deleteMany({ owner: userId }),
+    ]);
+ 
+    await User.findByIdAndDelete(userId);
 
-    const user = await User.findOneAndDelete(
-        {_id: userId}
-    );
+    res.clearCookie("accessToken", { httpOnly: true, secure: true });
+    res.clearCookie("refreshToken", { httpOnly: true, secure: true });
 
-    res
-    .status(200)
-    .json(
-        new ApiResponse(200, user, 'User deleted successfully')
+    res.status(200).json(
+        new ApiResponse(200, {}, "User account and all associated data deleted successfully")
     );
-})
+});
 
 export {
     userRegister,
