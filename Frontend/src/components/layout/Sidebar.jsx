@@ -35,7 +35,7 @@ const sidebarData = [
 ];
 
 function Sidebar() {
-    const { user, logout } = useAuth();
+    const { user, logout, logoutLoading } = useAuth();
     const navigate = useNavigate();
     const handleLogout = async () => {
         await logout();
@@ -77,10 +77,13 @@ function Sidebar() {
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 text-red-600 hover:text-red-700"
+                        disabled={logoutLoading}
+                        className="flex items-center gap-2 text-red-600 hover:text-red-700 disabled:opacity-50"
                     >
                         <LogOut className="h-5 w-5" />
-                        <span className="text-sm">Logout</span>
+                        <span className="text-sm">
+                            {logoutLoading ? "Logging out..." : "Logout"}
+                        </span>
                     </button>
                 </div>
             </main>

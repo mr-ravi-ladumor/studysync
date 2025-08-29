@@ -3,9 +3,9 @@ import ApiError from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import {User} from '../models/user.model.js';
 import { generateJwtTokens } from '../utils/jwt.js';
-import { Task } from '../models/task.model.js';
-import { Resource } from '../models/resource.model.js';
-import { Calendar } from '../models/calendar.model.js';
+import {Task}  from '../models/task.model.js';
+import Resource  from '../models/resource.model.js';
+import Calendar  from '../models/calendar.model.js';
 
 const userRegister = asyncHandler(async (req, res) => {
     // get user data from request body

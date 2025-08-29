@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [logoutLoading, setLogoutLoading] = useState(false);
 
     useEffect(() => {
         // console.log("useAuth :: AuthProvider useEffect called");
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
+        setLogoutLoading(true);
         try {
             await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/logout`, {
                 method: "POST",
@@ -52,6 +54,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             setError(false);
             localStorage.removeItem("user");
+            setLogoutLoading(false);
         }
     };
 
@@ -63,6 +66,7 @@ export const AuthProvider = ({ children }) => {
         error,
         setError,
         loading,
+        logoutLoading,
     };
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
