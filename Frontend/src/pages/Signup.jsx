@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import LoadingSpinner from "../components/utility/LoadingSpinner.jsx";
 
 function Signup() {
     const { login } = useAuth();
@@ -148,9 +149,13 @@ function Signup() {
                     <p className="text-red-500 text-center mb-4">{error}</p>
                 )}
                 {isLoading && (
-                    <p className="text-green-500 text-center mb-4">
-                        Creating your account...
-                    </p>
+                    <div className="flex items-center justify-center gap-2 text-green-500 mb-4">
+                        <LoadingSpinner
+                            size="h-5 w-5"
+                            color="border-green-500"
+                        />
+                        <p>Creating your account...</p>
+                    </div>
                 )}
                 <form className="space-y-6" onSubmit={onSubmitSignup}>
                     <div>

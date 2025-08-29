@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import LoadingSpinner from "../utility/LoadingSpinner.jsx";
 
 function UpdateTask({
     taskData,
@@ -12,9 +13,11 @@ function UpdateTask({
         dueDate: taskData.dueDate ? taskData.dueDate.split("T")[0] : "",
         priority: taskData.priority || "medium",
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmitUpdateTask = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
             const res = await fetch(
@@ -49,6 +52,8 @@ function UpdateTask({
         } catch (err) {
             console.error("Update Task error:", err);
             alert("Failed to update task. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -146,7 +151,11 @@ function UpdateTask({
                             type="submit"
                             className="px-4 py-2 rounded bg-green-600 text-white"
                         >
-                            Update
+                            {isLoading ? (
+                                <LoadingSpinner size={4} color="white" />
+                            ) : (
+                                "Update"
+                            )}
                         </button>
                     </div>
                 </form>

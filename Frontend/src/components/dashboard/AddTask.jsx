@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import LoadingSpinner from "../utility/LoadingSpinner.jsx";
 
 function AddTask({ setTasks, setShowAddTask }) {
     const [task, setTask] = useState({
@@ -7,9 +8,11 @@ function AddTask({ setTasks, setShowAddTask }) {
         dueDate: "",
         priority: "medium",
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmitAddTask = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
             const response = await fetch(
@@ -46,6 +49,8 @@ function AddTask({ setTasks, setShowAddTask }) {
         } catch (error) {
             console.error("Error adding task:", error);
             alert("Failed to add task. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
     return (
@@ -142,9 +147,20 @@ function AddTask({ setTasks, setShowAddTask }) {
                             </button>
                             <button
                                 type="submit"
-                                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
+                                disabled={isLoading}
+                                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg disabled:opacity-50"
                             >
-                                Add Task
+                                {isLoading ? (
+                                    <div className="flex items-center gap-2">
+                                        <LoadingSpinner
+                                            size="h-4 w-4"
+                                            color="border-white"
+                                        />
+                                        Adding...
+                                    </div>
+                                ) : (
+                                    "Add Task"
+                                )}
                             </button>
                         </div>
                     </form>

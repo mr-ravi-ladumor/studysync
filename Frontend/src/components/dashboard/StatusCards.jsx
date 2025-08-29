@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CircleCheck, Clock4, CalendarClock, Bookmark } from "lucide-react";
+import LoadingSpinner from "../utility/LoadingSpinner.jsx";
 
 function StatusCards() {
     const [summary, setSummary] = useState({
@@ -8,8 +9,9 @@ function StatusCards() {
         dueToday: 0,
         upcomingEvents: 0,
         resourcesCount: 0,
-        coursesCount: 0
+        coursesCount: 0,
     });
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchSummary = async () => {
@@ -27,6 +29,8 @@ function StatusCards() {
                 setSummary((prev) => ({ ...prev, ...d }));
             } catch (e) {
                 // ignore
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchSummary();
@@ -88,6 +92,14 @@ function StatusCards() {
             color: "#7c3aed",
         },
     ];
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-32">
+                <LoadingSpinner />
+            </div>
+        );
+    }
 
     return (
         <>

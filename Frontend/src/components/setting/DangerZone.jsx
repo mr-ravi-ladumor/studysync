@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
+import LoadingSpinner from "../utility/LoadingSpinner.jsx";
 
 function DangerZone() {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [confirmText, setConfirmText] = useState("");
     const [deleteError, setDeleteError] = useState("");
@@ -28,7 +33,9 @@ function DangerZone() {
                 throw new Error(data.message || "Failed to delete account");
             }
 
-            // Handle successful deletion : Todo
+            // Handle successful deletion: logout and redirect
+            await logout();
+            navigate("/login", { replace: true });
         } catch (error) {
             setDeleteError(error.message || "Failed to delete account");
             setIsDeleting(false);
@@ -151,9 +158,17 @@ function DangerZone() {
                                             : "bg-red-200 text-red-700 cursor-not-allowed"
                                     }`}
                                 >
-                                    {isDeleting
-                                        ? "Deleting..."
-                                        : "Delete Account"}
+                                    {isDeleting ? (
+                                        <div className="flex items-center gap-2">
+                                            <LoadingSpinner
+                                                size="h-4 w-4"
+                                                color="border-white"
+                                            />
+                                            Deleting...
+                                        </div>
+                                    ) : (
+                                        "Delete Account"
+                                    )}
                                 </button>
                             </div>
                         </div>
