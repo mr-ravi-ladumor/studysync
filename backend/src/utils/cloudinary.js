@@ -11,6 +11,6 @@ export const deleteFileFromCloudinary = asyncHandler(async (public_id) => {
 
     const result = await cloudinary.uploader.destroy(public_id);
 
-    console.log("Cloudinary file deleted :");
+    // console.log("Cloudinary file deleted :");
     return result;
 })

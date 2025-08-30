@@ -90,12 +90,12 @@ function Signup() {
 
                     if (response.ok) {
                         const userData = await response.json();
-                        console.log("Signup successful:", userData);
+                        // console.log("Signup successful:", userData);
                         login(userData.data.user);
                         navigate("/dashboard");
                     } else {
                         const errorData = await response.json();
-                        console.log("Auto-login failed:", errorData);
+                        // console.log("Auto-login failed:", errorData);
                         if (errorData.message) {
                             setError(errorData.message);
                         } else {
@@ -114,7 +114,7 @@ function Signup() {
                 }
             } else {
                 const errorData = await responseSignup.json();
-                console.log("Signup failed:", errorData);
+                // console.log("Signup failed:", errorData);
                 if (errorData.message) {
                     setError(errorData.message);
                 } else {
@@ -122,7 +122,7 @@ function Signup() {
                 }
             }
         } catch (error) {
-            console.log("network error:", error);
+            console.error("network error:", error);
             setError("Connection error, please try again later.");
         } finally {
             setIsLoading(false);

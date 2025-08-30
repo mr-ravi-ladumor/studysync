@@ -38,10 +38,7 @@ function Resources() {
                     throw new Error("Failed to fetch resources");
                 }
                 setResources(allResourcesData.data);
-                console.log(
-                    "Resources fetched successfully:",
-                    allResourcesData.data
-                );
+                // console.log("Resources fetched successfully:",allResourcesData.data);
             } catch (error) {
                 console.error("Error fetching resources:", error);
             }
@@ -64,7 +61,6 @@ function Resources() {
         }
 
         try {
-            console.log("", resourceId);
             const response = await fetch(
                 `${
                     import.meta.env.VITE_BACKEND_URL
@@ -76,7 +72,7 @@ function Resources() {
             );
 
             const deleteResult = await response.json();
-            console.log("Delete result:", deleteResult);
+            
             if (!response.ok) {
                 throw new Error(
                     deleteResult.message || "Failed to delete resource"

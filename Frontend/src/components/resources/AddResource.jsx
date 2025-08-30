@@ -62,11 +62,10 @@ function AddResource({ setShowAddResource, setResources }) {
           setError("Please provide a valid link.");
           return false;
         }
-        console.log(link);
         try {
           new URL(link);
         } catch {
-          console.log("Invalid URL format:", link);
+        //   console.log("Invalid URL format:", link);
           setError("Please enter a valid URL.");
           return false;
         }
@@ -105,7 +104,7 @@ function AddResource({ setShowAddResource, setResources }) {
       return true;
     }
     if (!validateResource()) return;
-    console.log("Resource data to be submitted:", resource);
+    // console.log("Resource data to be submitted:", resource);
 
     const formData = new FormData();
 
@@ -149,7 +148,7 @@ function AddResource({ setShowAddResource, setResources }) {
       });
       setError("");
       setResources((prevResources) => [...prevResources, resourceData.data]);
-      console.log("Resource added successfully:", resourceData.data);
+    //   console.log("Resource added successfully:", resourceData.data);
     } catch (error) {
       console.error("newtork ! Error adding resource:", error);
       setError("Failed to add resource. Please try again.");

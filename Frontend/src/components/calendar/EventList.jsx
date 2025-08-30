@@ -122,7 +122,7 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                     endDateTime: new Date(event.endDateTime),
                 }));
                 setCalendarEvents(transformedEvents);
-                console.log("Events fetched successfully:", transformedEvents);
+                // console.log("Events fetched successfully:", transformedEvents);
             } catch (error) {
                 console.error("Error fetching Events:", error);
             }

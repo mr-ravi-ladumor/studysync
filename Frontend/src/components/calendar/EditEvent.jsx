@@ -88,12 +88,12 @@ function EditEvent({eventData, setShowEditEvent , setSelectedEvent, setCalendarE
             const updatedEventData = await response.json();
 
             if (!response.ok) {
-                console.log("Error updating event:", updatedEventData.data);
+                // console.log("Error updating event:", updatedEventData.data);
                 setError(updatedEventData.message || 'Failed to updating event. Please try again.');
                 return;
             }
 
-            console.log("Event updated successfully:", updatedEventData.data);
+            // console.log("Event updated successfully:", updatedEventData.data);
             setError('');
             setSelectedEvent(null);
             
@@ -109,7 +109,7 @@ function EditEvent({eventData, setShowEditEvent , setSelectedEvent, setCalendarE
             setShowEditEvent(false);
 
         } catch (error) {
-            console.log("Network Error updating event:", error);
+            // console.log("Network Error updating event:", error);
             setError('Failed to update event. Please try again later.');
         }
     }

@@ -60,13 +60,13 @@ function Login() {
 
             if (response.ok) {
                 const userData = await response.json();
-                console.log("Login successful:", userData.data.user);
+                // console.log("Login successful:", userData.data.user);
                 login(userData.data.user);
                 setError("");
                 navigate("/dashboard");
             } else {
                 const errorData = await response.json();
-                console.log("Login failed:", errorData);
+                // console.log("Login failed:", errorData);
                 if (errorData.message) {
                     setError(errorData.message);
                 } else {

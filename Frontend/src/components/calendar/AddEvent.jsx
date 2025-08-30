@@ -87,15 +87,15 @@ function AddEvent({ setShowAddEvent }) {
             const eventData = await response.json();
 
             if (!response.ok) {
-                console.log("Error adding event:", eventData);
+                // console.log("Error adding event:", eventData);
                 setError(eventData.message || 'Failed to add event. Please try again.');
             }
 
-            console.log("Event added successfully:", eventData);
+            // console.log("Event added successfully:", eventData);
             setError('');
             setShowAddEvent(false);
         } catch (error) {
-            console.log("Network Error adding event:", error);
+            // console.log("Network Error adding event:", error);
             setError('Failed to add event. Please try again later.');
         }
     }

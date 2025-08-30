@@ -4,7 +4,7 @@ function DeleteEvent({ eventId, setCalendarEvents, setSelectedEvent, setShowDele
 
   const onSubmitDeleteEvent = async (e) => {
     e.preventDefault();
-    console.log("Deleting event with ID:", eventId);
+    // console.log("Deleting event with ID:", eventId);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/calendar/delete/${eventId}`,

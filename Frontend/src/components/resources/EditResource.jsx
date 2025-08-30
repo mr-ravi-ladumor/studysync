@@ -128,7 +128,7 @@ function EditResource({
       );
 
       const updatedResource = await response.json();
-        console.log("Updated Resource:", updatedResource);
+        // console.log("Updated Resource:", updatedResource);
       if (!response.ok) {
         throw new Error(updatedResource.message || "Failed to update resource");
       }
