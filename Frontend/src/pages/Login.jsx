@@ -55,8 +55,7 @@ function Login() {
                     body: JSON.stringify(formData),
                 }
             );
-            // removed artificial delay for snappier UX
-            // console.log(response)
+            
 
             if (response.ok) {
                 const userData = await response.json();

@@ -89,6 +89,7 @@ const userLogin = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // Only secure in production
+        sameSite: "none",
     };
 
     return res
@@ -120,7 +121,8 @@ const userLogout = asyncHandler(async (req, res) => {
     }
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production", // Only secure in production
+        sameSite: "none",
     };
 
     return res
@@ -223,10 +225,12 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.clearCookie("accessToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
     });
     res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
     });
 
     res.status(200).json(
