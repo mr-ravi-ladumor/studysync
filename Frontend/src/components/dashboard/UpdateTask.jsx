@@ -143,13 +143,13 @@ function UpdateTask({
                                 setShowUpdateTask(false);
                                 setSelectedTask(null);
                             }}
-                            className="px-4 py-2 rounded bg-gray-200"
+                            className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors duration-200"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 rounded bg-green-600 text-white"
+                            className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 shadow-sm"
                         >
                             {isLoading ? (
                                 <LoadingSpinner size={4} color="white" />

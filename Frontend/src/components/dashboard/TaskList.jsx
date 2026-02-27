@@ -50,6 +50,7 @@ function TaskList({ tasks, setTasks }) {
     const [showDeleteTask, setShowDeleteTask] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
     const [expanded, setExpanded] = useState([]);
+    const [isLoadingTasks, setIsLoadingTasks] = useState(true);
 
     const toggleExpand = (id) => {
         setExpanded((prev) =>
@@ -85,6 +86,7 @@ function TaskList({ tasks, setTasks }) {
     useEffect(() => {
         // Fetch tasks from the backend when the component mounts
         const fetchTasks = async () => {
+            setIsLoadingTasks(true);
             try {
                 const response = await fetch(
                     `${import.meta.env.VITE_BACKEND_URL}/api/tasks`,
@@ -98,9 +100,10 @@ function TaskList({ tasks, setTasks }) {
                 }
                 const allTasksData = await response.json();
                 setTasks(allTasksData.data);
-                // console.log("Tasks fetched successfully:", allTasksData.data);
             } catch (error) {
-                // console.error("Error fetching tasks:", error);
+                // Ignore error locally if handled or toast.error
+            } finally {
+                setIsLoadingTasks(false);
             }
         };
         fetchTasks();
@@ -114,9 +117,33 @@ function TaskList({ tasks, setTasks }) {
             </p>
 
             <div className="flex flex-col gap-4">
-                {tasks.length === 0 ? (
-                    <div className="text-gray-500 text-center py-8">
-                        No tasks yet. Click ‘Add New Task’ to get started!
+                {isLoadingTasks ? (
+                    Array.from({ length: 4 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row md:justify-between gap-3 items-start md:items-center animate-pulse border border-gray-100"
+                        >
+                            <div className="flex items-start gap-3 w-full">
+                                <div className="w-8 h-8 rounded-full bg-gray-200 shrink-0"></div>
+                                <div className="flex-1 space-y-2 mt-1">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-5 bg-gray-200 rounded w-1/3"></div>
+                                        <div className="h-4 bg-gray-200 rounded-full w-16"></div>
+                                    </div>
+                                    <div className="h-3 bg-gray-200 rounded w-1/4 mt-2"></div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 self-end md:self-center">
+                                <div className="h-6 w-16 bg-gray-200 rounded"></div>
+                                <div className="h-5 w-10 bg-gray-200 rounded"></div>
+                                <div className="h-5 w-12 bg-gray-200 rounded"></div>
+                            </div>
+                        </div>
+                    ))
+                ) : tasks.length === 0 ? (
+                    <div className="bg-gray-50 border border-dashed border-gray-300 rounded-xl text-gray-500 text-center flex flex-col items-center justify-center py-12">
+                        <p className="text-lg font-medium mb-1">No tasks yet</p>
+                        <p className="text-sm">Click ‘Add New Task’ to get started!</p>
                     </div>
                 ) : (
                     tasks.map((task) => {
@@ -129,7 +156,7 @@ function TaskList({ tasks, setTasks }) {
                         return (
                             <div
                                 key={task._id}
-                                className={`bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row md:justify-between gap-3 items-start md:items-center ${isOverdue ? "border-l-4 border-red-400" : ""
+                                className={`bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row md:justify-between gap-3 items-start md:items-center transition-all duration-300 hover:shadow-md border border-transparent hover:border-gray-200 ${isOverdue ? "border-l-4 border-l-red-500" : ""
                                     }`}
                             >
                                 <div className="flex items-start gap-3 w-full">
@@ -140,9 +167,9 @@ function TaskList({ tasks, setTasks }) {
                                                 ? "Mark as not completed"
                                                 : "Mark as completed"
                                         }
-                                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${task.status === "completed"
-                                                ? "bg-green-600 text-white"
-                                                : "bg-gray-100 text-gray-700"
+                                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform hover:scale-110 active:scale-95 shadow-sm border ${task.status === "completed"
+                                            ? "bg-green-500 text-white border-green-600"
+                                            : "bg-gray-50 text-gray-400 border-gray-300 hover:border-gray-400 hover:bg-gray-100"
                                             }`}
                                     >
                                         {task.status === "completed" ? "✓" : ""}
@@ -154,9 +181,9 @@ function TaskList({ tasks, setTasks }) {
                                                 onClick={() =>
                                                     toggleExpand(task._id)
                                                 }
-                                                className="text-left"
+                                                className="text-left group"
                                             >
-                                                <span className="font-medium text-gray-900">
+                                                <span className="font-medium text-gray-800 transition-colors group-hover:text-blue-600">
                                                     {task.title}
                                                 </span>
                                             </button>
@@ -194,7 +221,7 @@ function TaskList({ tasks, setTasks }) {
                                             setSelectedTask(task);
                                             setShowUpdateTask(true);
                                         }}
-                                        className="text-blue-600 text-sm md:text-base"
+                                        className="text-blue-600 text-sm md:text-base px-2 py-1 rounded hover:bg-blue-50 transition-colors duration-200 font-medium"
                                     >
                                         Edit
                                     </button>
@@ -203,7 +230,7 @@ function TaskList({ tasks, setTasks }) {
                                             setSelectedTask(task);
                                             setShowDeleteTask(true);
                                         }}
-                                        className="text-red-600 text-sm md:text-base"
+                                        className="text-red-600 text-sm md:text-base px-2 py-1 rounded hover:bg-red-50 transition-colors duration-200 font-medium"
                                     >
                                         Delete
                                     </button>
