@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <filter id="shadow" x="0" y="0" width="120" height="120" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="4" flood-opacity="0.1"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="2" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background (bg-green-400, rounded-xl) -->
+  <rect x="12" y="8" width="96" height="96" rx="12" fill="#4ade80" filter="url(#shadow)" />
+
+  <!-- Icon (lucide-plus, text-white) -->
+  <svg x="28" y="24" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14"></path>
+    <path d="M12 5v14"></path>
+  </svg>
+</svg>
