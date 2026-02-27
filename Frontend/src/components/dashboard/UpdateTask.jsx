@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import LoadingSpinner from "../utility/LoadingSpinner.jsx";
 
 function UpdateTask({
@@ -14,11 +15,9 @@ function UpdateTask({
         priority: taskData.priority || "medium",
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     const onSubmitUpdateTask = async (e) => {
         e.preventDefault();
-        setError(null);
         setIsLoading(true);
 
         try {
@@ -50,8 +49,9 @@ function UpdateTask({
             // close modal
             setShowUpdateTask(false);
             setSelectedTask(null);
+            toast.success("Task updated successfully!");
         } catch (err) {
-            setError(err.message || "Failed to update task. Please try again.");
+            toast.error(err.message || "Failed to update task. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -64,11 +64,6 @@ function UpdateTask({
                 <p className="text-gray-600 mb-4">
                     Edit the fields below and click Update.
                 </p>
-                {error && (
-                    <div className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
-                        {error}
-                    </div>
-                )}
 
                 <form
                     className="flex flex-col gap-3"

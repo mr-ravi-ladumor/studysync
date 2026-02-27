@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import UpdateTask from "./UpdateTask.jsx";
 import DeleteTask from "./DeleteTask.jsx";
 
@@ -60,8 +61,7 @@ function TaskList({ tasks, setTasks }) {
         const newStatus = task.status === "completed" ? "pending" : "completed";
         try {
             const res = await fetch(
-                `${import.meta.env.VITE_BACKEND_URL}/api/tasks/updateTask/${
-                    task._id
+                `${import.meta.env.VITE_BACKEND_URL}/api/tasks/updateTask/${task._id
                 }`,
                 {
                     method: "PUT",
@@ -78,7 +78,7 @@ function TaskList({ tasks, setTasks }) {
             );
         } catch (err) {
             console.error("Toggle complete error:", err);
-            alert("Could not update task status. Try again.");
+            toast.error("Could not update task status. Try again.");
         }
     };
 
@@ -129,9 +129,8 @@ function TaskList({ tasks, setTasks }) {
                         return (
                             <div
                                 key={task._id}
-                                className={`bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row md:justify-between gap-3 items-start md:items-center ${
-                                    isOverdue ? "border-l-4 border-red-400" : ""
-                                }`}
+                                className={`bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row md:justify-between gap-3 items-start md:items-center ${isOverdue ? "border-l-4 border-red-400" : ""
+                                    }`}
                             >
                                 <div className="flex items-start gap-3 w-full">
                                     <button
@@ -141,11 +140,10 @@ function TaskList({ tasks, setTasks }) {
                                                 ? "Mark as not completed"
                                                 : "Mark as completed"
                                         }
-                                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                                            task.status === "completed"
+                                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${task.status === "completed"
                                                 ? "bg-green-600 text-white"
                                                 : "bg-gray-100 text-gray-700"
-                                        }`}
+                                            }`}
                                     >
                                         {task.status === "completed" ? "✓" : ""}
                                     </button>
@@ -171,7 +169,7 @@ function TaskList({ tasks, setTasks }) {
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500">
-                                           • Due {dueText}
+                                            • Due {dueText}
                                         </p>
 
                                         {expanded.includes(task._id) &&

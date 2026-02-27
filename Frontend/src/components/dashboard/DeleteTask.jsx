@@ -1,12 +1,11 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
-  const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onSubmitDeleteTask = async (e) => {
     e.preventDefault();
-    setError(null);
     setIsDeleting(true);
 
     try {
@@ -32,8 +31,9 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
       setTasks((prevTasks) =>
         prevTasks.filter((task) => task._id !== deleteTask.data._id)
       );
+      toast.success("Task deleted successfully!");
     } catch (err) {
-      setError(err.message || "Failed to delete task. Please try again.");
+      toast.error(err.message || "Failed to delete task. Please try again.");
     } finally {
       setIsDeleting(false);
     }
@@ -47,11 +47,6 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
             Are you sure you want to delete this task? This action cannot be
             undone.
           </p>
-          {error && (
-            <div className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
-              {error}
-            </div>
-          )}
           <div className="flex justify-end gap-2">
             <button
               type="button"
