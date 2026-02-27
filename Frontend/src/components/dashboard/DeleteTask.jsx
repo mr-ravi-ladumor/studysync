@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
-
+  const [error, setError] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const onSubmitDeleteTask = async (e) => {
     e.preventDefault();
+    setError(null);
+    setIsDeleting(true);
 
     try {
       const response = await fetch(
@@ -22,20 +25,17 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
       if (!response.ok) {
         throw new Error(deleteTask.message || "Failed to Deleted task");
       }
-      
+
 
       setShowDeleteTask(false);
       setSelectedTask(null);
       setTasks((prevTasks) =>
-        prevTasks.filter((task) =>
-            task._id === deleteTask.data._id ? false : true
-        )
-    );
-
-      alert("Task Deleted successfully!");
-    } catch (error) {
-      console.error("Error Deleted task:", error);
-      alert("Failed to Deleted task. Please try again.");
+        prevTasks.filter((task) => task._id !== deleteTask.data._id)
+      );
+    } catch (err) {
+      setError(err.message || "Failed to delete task. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
   return (
@@ -47,6 +47,11 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
             Are you sure you want to delete this task? This action cannot be
             undone.
           </p>
+          {error && (
+            <div className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
+              {error}
+            </div>
+          )}
           <div className="flex justify-end gap-2">
             <button
               type="button"
@@ -60,10 +65,11 @@ function DeleteTask({ taskId, setTasks, setSelectedTask, setShowDeleteTask }) {
             </button>
             <button
               type="button"
-              onClick={onSubmitDeleteTask}              
-              className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition-colors duration-300 shadow-lg"
+              onClick={onSubmitDeleteTask}
+              disabled={isDeleting}
+              className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition-colors duration-300 shadow-lg disabled:opacity-50"
             >
-              Delete
+              {isDeleting ? "Deleting..." : "Delete"}
             </button>
           </div>
         </div>

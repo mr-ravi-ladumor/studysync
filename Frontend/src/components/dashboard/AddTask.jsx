@@ -9,9 +9,11 @@ function AddTask({ setTasks, setShowAddTask }) {
         priority: "medium",
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const onSubmitAddTask = async (e) => {
         e.preventDefault();
+        setError(null);
         setIsLoading(true);
 
         try {
@@ -36,19 +38,18 @@ function AddTask({ setTasks, setShowAddTask }) {
             if (!response.ok) {
                 throw new Error(addedTask.message || "Failed to add task");
             }
-            console.log("Task added successfully:", addedTask);
 
             setTasks((prevTasks) => [...prevTasks, addedTask.data]);
 
             setTask({
                 title: "",
                 description: "",
+                dueDate: "",
+                priority: "medium",
             });
             setShowAddTask(false);
-            // alert("Task added successfully!");
-        } catch (error) {
-            console.error("Error adding task:", error);
-            alert("Failed to add task. Please try again.");
+        } catch (err) {
+            setError(err.message || "Failed to add task. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -61,6 +62,11 @@ function AddTask({ setTasks, setShowAddTask }) {
                     <p className="text-gray-600 mb-6 border-b pb-5 border-gray-300">
                         Please fill in the details of your new task below.
                     </p>
+                    {error && (
+                        <div className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
+                            {error}
+                        </div>
+                    )}
                     <form
                         className="flex flex-col gap-2"
                         onSubmit={onSubmitAddTask}
