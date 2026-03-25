@@ -19,6 +19,7 @@ const resourceSchema = new Schema(
 
         resourceType: {
             type: String,
+            lowercase: true,
             required: true,
             enum: ["document", "image", "link", "video", "other"],
         },

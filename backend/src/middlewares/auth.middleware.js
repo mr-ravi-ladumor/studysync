@@ -9,7 +9,6 @@ export const verifyAuthToken = asyncHandler(async(req, _, next) => {
     if(!token) {
         throw new ApiError(401, "Auth :: Unauthorized access, please login to continue");
     }
-
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     if (!decoded || !decoded._id) {
