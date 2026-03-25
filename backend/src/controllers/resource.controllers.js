@@ -46,8 +46,7 @@ const uploadResource = asyncHandler( async (req, res) => {
     if (req.file.size > 10 * 1024 * 1024) {
         throw new ApiError(400, 'File size exceeds the limit of 10 MB');
     }
-
-    const { url, publicId } = await uploadFile(req.file);
+    const {url, publicId} = await uploadFile(req.file);
 
     const resource = await Resource.create({
         title: title,
