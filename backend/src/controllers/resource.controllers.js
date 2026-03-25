@@ -3,7 +3,7 @@ import ApiError from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import {allowedMimeTypes} from '../constants.js';
 import Resource from '../models/resource.model.js';
-import {deleteFileFromCloudinary} from '../utils/cloudinary.js';
+import { uploadFile, deleteFile } from '../utils/supabase.js';
 
 
 const uploadResource = asyncHandler( async (req, res) => {
@@ -47,15 +47,15 @@ const uploadResource = asyncHandler( async (req, res) => {
         throw new ApiError(400, 'File size exceeds the limit of 10 MB');
     }
 
-    
+    const { url, publicId } = await uploadFile(req.file);
 
     const resource = await Resource.create({
         title: title,
         originalFileName: req.file.originalname,
         resourceType: resourceType,
         subject: subject,
-        fileUrl: req.file.path,
-        publicId: req.file.filename,
+        fileUrl: url,
+        publicId: publicId,
         mimeType: req.file.mimetype,
         size: req.file.size,
         owner: req.user._id,
@@ -183,8 +183,8 @@ const updateResource = asyncHandler(async (req, res) => {
             throw new ApiError(400, 'File size exceeds the limit of 10 MB');
         }
 
-        //delete the existing file from cloudinary
-        await deleteFileFromCloudinary(existingResource.publicId);
+        //delete the existing file from supabase
+        await deleteFile(existingResource.publicId);
         existingResource.originalFileName = req.file.originalname;
         existingResource.resourceType = resourceType;
         existingResource.fileUrl = req.file.path;
@@ -206,8 +206,9 @@ const updateResource = asyncHandler(async (req, res) => {
             throw new ApiError(400, 'Invalid URL format');
         }
         
-        //delete the existing file from cloudinary
-        await deleteFileFromCloudinary(existingResource.publicId);
+        //delete the existing file from supabase
+        await deleteFile(existingResource.publicId);
+        
 
         existingResource.resourceType = resourceType;
         existingResource.link = link;
@@ -274,9 +275,9 @@ const deleteResource = asyncHandler(async (req, res) => {
         throw new ApiError(404, 'Resource not found');
     }
 
-    // If the resource is a file (not a link), delete it from Cloudinary
+    // If the resource is a file (not a link), delete it from supabase
     if (resource && resource.resourceType !== 'link') {
-        await deleteFileFromCloudinary(resource.publicId);
+        await deleteFile(resource.publicId);
     }
 
     
