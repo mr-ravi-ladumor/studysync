@@ -1,4 +1,5 @@
 import React from "react";
+import CopyBox from "../utility/CopyBox.jsx";
 
 function formatDate(date) {
     try {
@@ -57,27 +58,19 @@ export default function ViewResource({ resource, onClose }) {
                         {formatDate(resource.createdAt)}
                     </div>
                     {isLink ? (
-                        <div className="truncate">
+                        <div className="">
                             <span className="font-medium">Link:</span>{" "}
-                            {resource.link}
+                            <CopyBox text={resource.link} />
                         </div>
                     ) : (
-                        <div className="truncate">
+                        <div className="">
                             <span className="font-medium">File URL:</span>{" "}
-                            {resource.fileUrl}
+                            <CopyBox text={resource.fileUrl} />
                         </div>
                     )}
                 </div>
 
                 <div className="mt-5 flex justify-end gap-2">
-                    <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors"
-                    >
-                        {isLink ? "Open Link" : "Open File"}
-                    </a>
                     <button
                         onClick={onClose}
                         className="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300"

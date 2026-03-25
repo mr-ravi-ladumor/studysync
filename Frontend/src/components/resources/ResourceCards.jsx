@@ -145,7 +145,7 @@ function ResourceCards({ resources, onView, onEdit, onDelete }) {
                                 >
                                     {res.resourceType === "link"
                                         ? "Open Link"
-                                        : "Download"}
+                                        : "View"}
                                 </a>
                             </div>
                         </div>
