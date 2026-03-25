@@ -20,7 +20,7 @@ function returnFileSize(number) {
     return `${(number / 1e6).toFixed(1)} MB`;
 }
 
-function ResourceCards({ resources, onView, onEdit, onDelete }) {
+function ResourceCards({ resources, onViewDetails, onEdit, onDelete }) {
     const themeForType = (type) => {
         switch ((type || "").toLowerCase()) {
             case "document":
@@ -106,7 +106,7 @@ function ResourceCards({ resources, onView, onEdit, onDelete }) {
                                     </div>{" "}
                                 </div>
                                 <ThreeDotsMenu
-                                    onView={() => onView(res)}
+                                    onViewDetails={() => onViewDetails(res)}
                                     onEdit={() => onEdit(res)}
                                     onDelete={() => onDelete(res._id)}
                                 />

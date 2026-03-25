@@ -46,7 +46,7 @@ function Resources() {
         fetchResources();
     }, []);
 
-    const handleView = (resource) => {
+    const handleViewDetails = (resource) => {
         setViewing(resource);
     };
 
@@ -152,7 +152,7 @@ function Resources() {
                                   (r) => r.resourceType === activeFilter
                               )
                     }
-                    onView={handleView}
+                    onViewDetails={handleViewDetails}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                 />
