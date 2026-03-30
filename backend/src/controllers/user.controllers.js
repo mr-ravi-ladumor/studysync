@@ -6,6 +6,7 @@ import { generateJwtTokens } from "../utils/jwt.js";
 import { Task } from "../models/task.model.js";
 import Resource from "../models/resource.model.js";
 import Calendar from "../models/calendar.model.js";
+import { sendOTPByMail } from "../utils/mailSender.js";
 
 const userRegister = asyncHandler(async (req, res) => {
     // get user data from request body
@@ -242,6 +243,35 @@ const deleteUser = asyncHandler(async (req, res) => {
     );
 });
 
+// Request OTP
+const forgotPassword = asyncHandler(async (req, res) => {
+    const {email} = req.body;
+
+    if(!email) {
+        throw new ApiError(400, "Email is Required");
+    }
+
+    const user = await User.findOne({email});
+
+    if(!user) {
+        throw new ApiError(404, "User with this email does not exist");
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.forgotPasswordOTP = otp;
+    user.forgotPasswordOTPExpiry = Date.now() + 10 * 60 * 1000;
+
+    await user.save({validateBeforeSave: false});
+
+    await sendOTPByMail(email, otp);
+
+    res.status(200).json(
+        new ApiResponse(200, {}, "OTP sent to your email. Check you inbox!")
+    );
+})
+
+
 export {
     userRegister,
     userLogin,
@@ -249,4 +279,5 @@ export {
     updateUserData,
     changePassword,
     deleteUser,
+    forgotPassword,
 };
