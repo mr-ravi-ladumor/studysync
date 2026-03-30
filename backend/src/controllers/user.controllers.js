@@ -134,7 +134,7 @@ const userLogout = asyncHandler(async (req, res) => {
 });
 
 const updateUserData = asyncHandler(async (req, res) => {
-    const { firstname, lastname, email } = req.body;
+    const { firstname, lastname, email, bio } = req.body;
     const updateObj = {};
     if (
         firstname !== undefined &&
@@ -153,6 +153,8 @@ const updateUserData = asyncHandler(async (req, res) => {
     } else if (email.trim() === "") {
         throw new ApiError(400, "Email cannot be empty");
     }
+
+    if (bio !== undefined && bio !== null) updateObj.bio = bio;
 
     if (Object.keys(updateObj).length === 0) {
         throw new ApiError(400, "No valid provided to update");

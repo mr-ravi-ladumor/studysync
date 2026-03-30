@@ -24,7 +24,7 @@ function Account() {
         firstname: "",
         lastname: "",
         email: "",
-        // bio: "",
+        bio: "",
     });
     const [theme, setTheme] = useState(getStoredTheme());
 
@@ -35,21 +35,16 @@ function Account() {
         } catch (e) {}
     }, [theme]);
 
-    // Update formData when user data is available
     useEffect(() => {
         if (user) {
             setFormData({
                 firstname: user.firstname || "",
                 lastname: user.lastname || "",
                 email: user.email || "",
-                bio:
-                    user.bio ||
-                    "Computer Science student at University of Technology. Passionate about web development and machine learning.",
+                bio: user.bio || "",
             });
         }
     }, [user]);
-
-    //   console.log(formData);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -60,8 +55,6 @@ function Account() {
     };
 
     const handleSaveChanges = async () => {
-        // console.log("Saving changes:", formData);
-
         try {
             const response = await fetch(
                 `${import.meta.env.VITE_BACKEND_URL}/api/user/update`,
@@ -78,7 +71,6 @@ function Account() {
                 throw new Error("Failed to save changes");
             }
             const userData = await response.json();
-            // console.log("Changes saved successfully:", userData.data);
             login(userData.data);
         } catch (error) {
             console.log("Network error ! Error saving changes:", error);
@@ -119,7 +111,6 @@ function Account() {
 
                 {/* Name Fields */}
                 <div className="flex w-full gap-6 mb-6">
-                    {" "}
                     <div className="w-1/2">
                         <label
                             htmlFor="firstname"
@@ -189,7 +180,7 @@ function Account() {
                         maxLength={200}
                         value={formData.bio}
                         onChange={handleInputChange}
-                        placeholder="Computer Science student at University of Technology. Passionate about web development and machine learning."
+                        placeholder="Write your bio here..."
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
                     />
                     <p className="text-md text-gray-500 mt-1">
