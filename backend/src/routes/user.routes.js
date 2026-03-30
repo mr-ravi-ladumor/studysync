@@ -1,16 +1,18 @@
 import Router from 'express';
-import {verifyAuthToken} from '../middlewares/auth.middleware.js';
-import { 
+import { verifyAuthToken } from '../middlewares/auth.middleware.js';
+import {
     userRegister,
     userLogin,
     userLogout,
     updateUserData,
+    updateAvatar,
     changePassword,
     deleteUser,
     forgotPassword,
     verifyOTP,
     resetPassword,
- } from '../controllers/user.controllers.js';
+} from '../controllers/user.controllers.js';
+import { uploadAvatarToSupabase } from '../middlewares/uploadSupabase.middleware.js';
 
 const router = Router();
 
@@ -19,6 +21,7 @@ router.route('/signup').post(userRegister);
 router.route('/login').post(userLogin);
 router.route('/logout').post(verifyAuthToken, userLogout);
 router.route('/update').put(verifyAuthToken, updateUserData);
+router.route('/updateAvatar').put(verifyAuthToken, uploadAvatarToSupabase.single('avatar'), updateAvatar);
 router.route('/changePassword').put(verifyAuthToken, changePassword);
 router.route('/delete').delete(verifyAuthToken, deleteUser);
 router.route('/forgotPassword').post(forgotPassword);

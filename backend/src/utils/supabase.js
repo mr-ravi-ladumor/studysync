@@ -2,7 +2,7 @@ import { supabase } from '../config/supabase.js';
 import ApiError from './ApiError.js';
 import { v4 as uuidv4 } from 'uuid';
 
-export const uploadFile = async (file) => {
+export const uploadFile = async (file, bucket = 'resources') => {
     if (!file) {
         throw new ApiError(400, "File is required");
     }
@@ -10,7 +10,7 @@ export const uploadFile = async (file) => {
     const fileName = `${uuidv4()}-${file.originalname}`;
 
     const { data, error } = await supabase.storage
-        .from('resources')
+        .from(bucket)
         .upload(fileName, file.buffer, {
             contentType: file.mimetype,
         });
@@ -20,7 +20,7 @@ export const uploadFile = async (file) => {
     }
 
     const { data: { publicUrl } } = supabase.storage
-        .from('resources')
+        .from(bucket)
         .getPublicUrl(fileName);
 
     return {
@@ -29,12 +29,14 @@ export const uploadFile = async (file) => {
     };
 };
 
-export const deleteFile = async (fileName) => {
-    if (!fileName) return;
+export const deleteFile = async (publicId, bucket = 'resources') => {
+    if (!publicId) {
+        return;
+    }
     const { error } = await supabase.storage
-        .from('resources')
-        .remove([fileName]);
-        
+        .from(bucket)
+        .remove([publicId]);
+
     if (error) {
         throw new ApiError(500, `Supabase Delete Error: ${error.message}`);
     }

@@ -1,6 +1,6 @@
 import Router from 'express';
 import { verifyAuthToken } from '../middlewares/auth.middleware.js';
-import uploadSupabase from '../middlewares/uploadSupabase.middleware.js';
+import {uploadResourceToSupabase} from '../middlewares/uploadSupabase.middleware.js';
 
 import { 
     getAllResources,
@@ -14,9 +14,9 @@ import {
 const router = Router();
 
 router.route('/').get(verifyAuthToken, getAllResources)
-router.route('/upload').post(verifyAuthToken, uploadSupabase.single('file'), uploadResource)
+router.route('/upload').post(verifyAuthToken, uploadResourceToSupabase.single('file'), uploadResource)
 router.route('/:resourceId').get(verifyAuthToken, getResourceById)
-router.route('/update/:resourceId').put(verifyAuthToken, uploadSupabase.single('file'), updateResource)
+router.route('/update/:resourceId').put(verifyAuthToken, uploadResourceToSupabase.single('file'), updateResource)
 router.route('/delete/:resourceId').delete(verifyAuthToken, deleteResource)
 
 

@@ -7,6 +7,7 @@ import { Task } from "../models/task.model.js";
 import Resource from "../models/resource.model.js";
 import Calendar from "../models/calendar.model.js";
 import { sendOTPByMail } from "../utils/mailSender.js";
+import { uploadFile } from "../utils/supabase.js"
 
 const userRegister = asyncHandler(async (req, res) => {
     // get user data from request body
@@ -174,6 +175,33 @@ const updateUserData = asyncHandler(async (req, res) => {
     );
 });
 
+const updateAvatar = asyncHandler(async (req, res) => {
+    const avatar = req.file;
+    
+    if (!avatar) {
+        throw new ApiError(400, "Please provide an avatar");
+    }
+
+    if(req.user.avatarPublicId) {
+        await deleteFile(req.user.avatarPublicId, "avatars");
+    }
+    
+    const {url, publicId} = await uploadFile(avatar, "avatars");
+
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, { avatarUrl: url, avatarPublicId: publicId }, {
+        new: true,
+        runValidators: true,
+    }).select("-password -refreshToken");
+
+    if (!updatedUser) {
+        throw new ApiError(500, "User data update failed");
+    }
+   
+    res.status(200).json(
+        new ApiResponse(200, updatedUser, "User Avatar updated successfully")
+    );
+})
+
 const changePassword = asyncHandler(async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
@@ -331,6 +359,7 @@ export {
     userLogin,
     userLogout,
     updateUserData,
+    updateAvatar,
     changePassword,
     deleteUser,
     forgotPassword,

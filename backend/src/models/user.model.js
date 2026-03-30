@@ -27,7 +27,11 @@ const userSchema = new Schema(
             type: String,
             default: '',
         },
-        avatar: {
+        avatarUrl: {
+            type: String,
+            default: '',
+        },
+        avatarPublicId: {
             type: String,
             default: '',
         },

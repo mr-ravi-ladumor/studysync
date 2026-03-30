@@ -46,6 +46,33 @@ function Account() {
         }
     }, [user]);
 
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        const avatarData = new FormData();
+        avatarData.append("avatar", file);
+
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/api/user/updateAvatar`,
+                {
+                    method: "PUT",
+                    credentials: "include",
+                    body: avatarData,
+                }
+            );
+            if (!response.ok) {
+                throw new Error("Failed to update avatar");
+            }
+            const userData = await response.json();
+            login(userData.data);
+        } catch (error) {
+            console.log("Network error ! Error updating avatar:", error);
+        }
+    }
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -89,17 +116,27 @@ function Account() {
                 <div className="flex items-center space-x-6 mb-8">
                     <div className="relative">
                         <img
-                            src={`https://ui-avatars.com/api/?name=${user?.firstname}+${user?.lastname}&background=10b981&color=fff&size=80`}
+                            src={user.avatarUrl ? user.avatarUrl : `https://ui-avatars.com/api/?name=${user?.firstname}+${user?.lastname}&background=10b981&color=fff&size=80`}
                             alt="Profile"
                             className="w-20 h-20 rounded-full object-cover"
                         />
                     </div>
                     <div>
                         <div className="flex space-x-4">
-                            <button className="text-blue-600 hover:text-blue-700 font-medium">
+                            <label 
+                                htmlFor="avatar" 
+                                className="text-blue-600 hover:text-blue-700 font-medium">
                                 Change Photo
-                            </button>
-                            <button className="text-red-600 hover:text-red-700 font-medium">
+                            </label>
+                            <input 
+                                type='file' 
+                                id="avatar" 
+                                name="avatar" 
+                                className="hidden"
+                                onChange={handleAvatarChange}
+                            />
+                            <button 
+                                className="text-red-600 hover:text-red-700 font-medium">
                                 Remove
                             </button>
                         </div>

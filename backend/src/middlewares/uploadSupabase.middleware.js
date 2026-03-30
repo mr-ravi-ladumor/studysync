@@ -8,14 +8,22 @@ const fileFilter = (req, file, cb) => {
     const ext = file.originalname.split('.').pop().toLowerCase();
     const mimeType = file.mimetype;
 
-    if( allowedExtensions.includes(ext) && allowedMimeTypes.includes(mimeType)) {
+    if (allowedExtensions.includes(ext) && allowedMimeTypes.includes(mimeType)) {
         cb(null, true);
     } else {
-        cb(new ApiError(401,'Invalid file type'), false);
+        cb(new ApiError(401, 'Invalid file type'), false);
     }
 }
 
-const uploadSupabase = multer({
+const uploadAvatarToSupabase = multer({
+    storage,
+    limits: {
+        fileSize: 2 * 1024 * 1024, // 2 MB
+        files: 1,
+    },
+});
+
+const uploadResourceToSupabase = multer({
     storage,
     fileFilter,
     limits: {
@@ -24,4 +32,4 @@ const uploadSupabase = multer({
     },
 });
 
-export default uploadSupabase;
+export { uploadAvatarToSupabase, uploadResourceToSupabase };
