@@ -16,6 +16,7 @@ import Dashboard from "../pages/Dashboard.jsx";
 import Resources from "../pages/Resources.jsx";
 import Calendar from "../pages/Calendar.jsx";
 import Settings from "../pages/Settings.jsx";
+import ForgotPassword from "../pages/ForgotPassword.jsx";
 
 // Simple guard for authenticated routes
 function RequireAuth({ children }) {
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             <Route
                 path="/"

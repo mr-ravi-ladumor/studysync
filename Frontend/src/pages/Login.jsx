@@ -119,7 +119,7 @@ function Login() {
                         <div className="space-y-2">
                             <div className="flex items-center justify-between ml-1">
                                 <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest" htmlFor="password">Password</label>
-                                <a href="#" className="text-xs font-bold text-[#22c55e] hover:opacity-80 transition-opacity">Forgot?</a>
+                                <Link to="/forgot-password" className="text-xs font-bold text-[#22c55e] hover:opacity-80 transition-opacity">Forgot?</Link>
                             </div>
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#22c55e] transition-colors">
