@@ -115,16 +115,16 @@ function DangerZone() {
                                 </ul>
                             </div>
 
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="form-label">
                                 Type{" "}
-                                <span className="font-semibold">DELETE</span> to
+                                <span className="font-semibold text-gray-700">DELETE</span> to
                                 confirm
                             </label>
                             <input
                                 type="text"
                                 value={confirmText}
                                 onChange={(e) => setConfirmText(e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md mb-3"
+                                className="form-input mb-3"
                                 placeholder="Type DELETE"
                             />
 
@@ -142,7 +142,7 @@ function DangerZone() {
                                         setConfirmText("");
                                         setDeleteError("");
                                     }}
-                                    className="bg-white border border-gray-300 px-4 py-2 rounded-md"
+                                    className="btn-secondary"
                                 >
                                     Cancel
                                 </button>
@@ -152,20 +152,16 @@ function DangerZone() {
                                         confirmText !== "DELETE" || isDeleting
                                     }
                                     onClick={handleDeleteAccount}
-                                    className={`px-4 py-2 rounded-md font-medium ${
-                                        confirmText === "DELETE" && !isDeleting
-                                            ? "bg-red-600 text-white hover:bg-red-700"
-                                            : "bg-red-200 text-red-700 cursor-not-allowed"
-                                    }`}
+                                    className="btn-danger"
                                 >
                                     {isDeleting ? (
-                                        <div className="flex items-center gap-2">
+                                        <>
                                             <LoadingSpinner
-                                                size="h-4 w-4"
+                                                size="h-5 w-5"
                                                 color="border-white"
                                             />
                                             Deleting...
-                                        </div>
+                                        </>
                                     ) : (
                                         "Delete Account"
                                     )}

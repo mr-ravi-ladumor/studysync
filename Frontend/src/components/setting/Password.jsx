@@ -81,12 +81,12 @@ function Password() {
           {/* Current Password  */}
           <div>
             <label
-              className="block text-md font-medium text-gray-700 mb-1"
+              className="form-label"
               htmlFor="currentPassword"
             >
               Current Password
             </label>
-            <div className="relative">
+            <div className="relative group">
               <input
                 type={!showPassword.current ? "text" : "password"}
                 id="currentPassword"
@@ -94,7 +94,7 @@ function Password() {
                 onChange={(e) =>
                   setFormData({ ...formData, currentPassword: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input"
                 placeholder="Enter your password"
                 required
               />
@@ -102,7 +102,7 @@ function Password() {
                 type="button"
                 name="current"
                 onClick={() => togglePasswordVisibility("current")}
-                className="absolute text-gray-500 top-1/5 right-5 "
+                className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[#111827] transition-colors"
                 tabIndex={-1}
               >
                 {showPassword.current ? (
@@ -117,12 +117,12 @@ function Password() {
             {/* New Password */}
           <div>
             <label
-              className="block text-md font-medium text-gray-700 mb-1"
+              className="form-label"
               htmlFor="newPassword"
             >
               New Password
             </label>
-            <div className="relative">
+            <div className="relative group">
               <input
                 type={!showPassword.new ? "text" : "password"}
                 id="newPassword"
@@ -130,7 +130,7 @@ function Password() {
                 onChange={(e) =>
                   setFormData({ ...formData, newPassword: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input"
                 placeholder="Enter your password"
                 required
               />
@@ -138,7 +138,7 @@ function Password() {
                 type="button"
                 name="new"
                 onClick={() => togglePasswordVisibility("new")}
-                className="absolute text-gray-500 top-1/5 right-5 "
+                className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[#111827] transition-colors"
                 tabIndex={-1}
               >
                 {showPassword.new ? (
@@ -153,12 +153,12 @@ function Password() {
             {/* Confirm New Password */}
           <div>
             <label
-              className="block text-md font-medium text-gray-700 mb-1"
+              className="form-label"
               htmlFor="confirmPassword"
             >
               Confirm New Password
             </label>
-            <div className="relative">
+            <div className="relative group">
               <input
                 type={!showPassword.confirm ? "text" : "password"}
                 id="confirmPassword"
@@ -166,7 +166,7 @@ function Password() {
                 onChange={(e) =>
                   setFormData({ ...formData, confirmPassword: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input"
                 placeholder="Enter your password"
                 required
               />
@@ -174,7 +174,7 @@ function Password() {
                 type="button"
                 name="confirm"
                 onClick={() => togglePasswordVisibility("confirm")}
-                className="absolute text-gray-500 top-1/5 right-5 "
+                className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[#111827] transition-colors"
                 tabIndex={-1}
               >
                 {showPassword.confirm ? (
@@ -186,10 +186,10 @@ function Password() {
             </div>
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-6">
           <button
             onClick={onSubmitChangePassword}
-            className="bg-green-500 hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200"
+            className="btn-primary"
           >
             Change Password
           </button>

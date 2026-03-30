@@ -58,8 +58,8 @@ function UpdateTask({
     };
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 sm:p-6">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md mx-auto max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <h3 className="text-xl font-medium mb-2">Update Task</h3>
                 <p className="text-gray-600 mb-4">
                     Edit the fields below and click Update.
@@ -69,20 +69,20 @@ function UpdateTask({
                     className="flex flex-col gap-3"
                     onSubmit={onSubmitUpdateTask}
                 >
-                    <div>
-                        <label className="block text-sm mb-1">Title</label>
+                    <div className="flex flex-col w-full mb-2">
+                        <label className="form-label">Title</label>
                         <input
                             value={task.title}
                             onChange={(e) =>
                                 setTask({ ...task, title: e.target.value })
                             }
                             required
-                            className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="form-input"
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm mb-1">
+                    <div className="flex flex-col w-full mb-2">
+                        <label className="form-label">
                             Description
                         </label>
                         <textarea
@@ -94,13 +94,13 @@ function UpdateTask({
                                     description: e.target.value,
                                 })
                             }
-                            className="w-full mb-4 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="form-input resize-none"
                         />
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 mb-2">
                         <div className="flex-1">
-                            <label className="block text-sm mb-1">
+                            <label className="form-label">
                                 Due Date
                             </label>
                             <input
@@ -112,11 +112,11 @@ function UpdateTask({
                                         dueDate: e.target.value,
                                     })
                                 }
-                                className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="form-input"
                             />
                         </div>
                         <div className="w-36">
-                            <label className="block text-sm mb-1">
+                            <label className="form-label">
                                 Priority
                             </label>
                             <select
@@ -127,7 +127,7 @@ function UpdateTask({
                                         priority: e.target.value,
                                     })
                                 }
-                                className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="form-input"
                             >
                                 <option value="low">Low</option>
                                 <option value="medium">Medium</option>
@@ -136,25 +136,29 @@ function UpdateTask({
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-2 mt-2">
+                    <div className="flex justify-end gap-3 mt-4">
                         <button
                             type="button"
                             onClick={() => {
                                 setShowUpdateTask(false);
                                 setSelectedTask(null);
                             }}
-                            className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors duration-200"
+                            className="btn-secondary px-5 py-2 text-sm"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 shadow-sm"
+                            disabled={isLoading}
+                            className="btn-primary px-5 py-2 text-sm"
                         >
                             {isLoading ? (
-                                <LoadingSpinner size={4} color="white" />
+                                <>
+                                    <LoadingSpinner size="h-4 w-4" color="border-white" />
+                                    Updating...
+                                </>
                             ) : (
-                                "Update"
+                                "Update Task"
                             )}
                         </button>
                     </div>

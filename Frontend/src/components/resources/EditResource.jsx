@@ -150,8 +150,8 @@ function EditResource({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-        <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
+      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 sm:p-6">
+        <div className="bg-white rounded-xl p-6 mx-auto w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar">
           <h3 className="text-xl mb-2">Edit Resource</h3>
           <p className="text-gray-600 mb-6 border-b pb-5 border-gray-300">
             Please update the details of your resource below.
@@ -164,8 +164,8 @@ function EditResource({
               </span>
             )}
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="resource-title" className="block ">
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="resource-title" className="form-label">
                 Resource Title
               </label>
               <input
@@ -179,17 +179,17 @@ function EditResource({
                 }}
                 placeholder="Enter Resource Title..."
                 required
-                className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input"
               />
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="resource-type" className="block ">
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="resource-type" className="form-label">
                 Resource Type
               </label>
               <select
                 id="resource-type"
-                className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input"
                 value={resource.resourceType}
                 onChange={(e) => {
                   setResource({ ...resource, resourceType: e.target.value });
@@ -205,13 +205,13 @@ function EditResource({
               </select>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="resource-subject" className="block ">
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="resource-subject" className="form-label">
                 Subject
               </label>
               <select
                 id="resource-subject"
-                className="w-full mb-3 px-3 py-2 border overflow-y-scroll rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input mb-3 overflow-y-scroll"
                 value={resource.subject}
                 onChange={(e) => {
                   setResource({ ...resource, subject: e.target.value });
@@ -230,7 +230,7 @@ function EditResource({
                 <input
                   type="text"
                   placeholder="Enter Subject Name"
-                  className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="form-input"
                   value={resource.customSubject}
                   onChange={(e) => {
                     setResource({ ...resource, customSubject: e.target.value });
@@ -241,17 +241,17 @@ function EditResource({
               )}
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col w-full mb-2">
               {resource.resourceType === "link" ? (
                 <>
-                  <label htmlFor="resource-link" className="block ">
+                  <label htmlFor="resource-link" className="form-label">
                     Resource Link
                   </label>
                   <input
                     id="resource-link"
                     type="url"
                     placeholder="Enter Resource Link"
-                    className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="form-input"
                     value={resource.link}
                     onChange={(e) => {
                       setResource({ ...resource, link: e.target.value });
@@ -262,15 +262,15 @@ function EditResource({
                 </>
               ) : (
                 <>
-                  <label htmlFor="resource-file" className="block ">
+                  <label htmlFor="resource-file" className="form-label">
                     Upload New File (Optional)
                   </label>
-                  <div className="text-xs text-gray-500 mb-2">
+                  <div className="text-xs text-gray-400 mb-2 font-medium">
                     Current: {resourceData.originalFileName || "No file"}
                   </div>
                   <label
                     htmlFor="resource-file"
-                    className="w-full flex flex-col items-center justify-center p-6 mb-3 border-2 border-dashed border-gray-400 rounded cursor-pointer hover:bg-gray-50 transition"
+                    className="w-full flex flex-col items-center justify-center p-6 bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:bg-white hover:border-[#22c55e] transition-all duration-300"
                   >
                     <span className="text-gray-500">
                       Click to <span className="text-green-500">upload</span> or
@@ -310,18 +310,18 @@ function EditResource({
               )}
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-3 mt-4">
               <button
                 type="button"
                 onClick={() => setShowEditResource(false)}
-                className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors duration-300"
+                className="btn-secondary px-5 py-2 text-sm"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 onClick={onSubmitEditResource}
-                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
+                className="btn-primary px-5 py-2 text-sm"
               >
                 Update
               </button>

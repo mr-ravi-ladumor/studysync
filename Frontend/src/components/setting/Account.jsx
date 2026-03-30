@@ -114,7 +114,7 @@ function Account() {
                     <div className="w-1/2">
                         <label
                             htmlFor="firstname"
-                            className="block text-md font-medium text-gray-700 mb-2"
+                            className="form-label"
                         >
                             First Name
                         </label>
@@ -124,13 +124,13 @@ function Account() {
                             name="firstname"
                             value={formData.firstname}
                             onChange={handleInputChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="form-input"
                         />
                     </div>
                     <div className="w-1/2">
                         <label
                             htmlFor="lastname"
-                            className="block text-md font-medium text-gray-700 mb-2"
+                            className="form-label"
                         >
                             Last Name
                         </label>
@@ -140,7 +140,7 @@ function Account() {
                             name="lastname"
                             value={formData.lastname}
                             onChange={handleInputChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            className="form-input"
                         />
                     </div>
                 </div>
@@ -150,7 +150,7 @@ function Account() {
                     {" "}
                     <label
                         htmlFor="email"
-                        className="block text-md font-medium text-gray-700 mb-2"
+                        className="form-label"
                     >
                         Email Address
                     </label>
@@ -160,7 +160,7 @@ function Account() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        className="form-input"
                     />
                 </div>
 
@@ -169,7 +169,7 @@ function Account() {
                     {" "}
                     <label
                         htmlFor="bio"
-                        className="block text-md font-medium text-gray-700 mb-2"
+                        className="form-label"
                     >
                         Bio
                     </label>
@@ -181,7 +181,7 @@ function Account() {
                         value={formData.bio}
                         onChange={handleInputChange}
                         placeholder="Write your bio here..."
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                        className="form-input resize-none"
                     />
                     <p className="text-md text-gray-500 mt-1">
                         Brief description for your profile. Max 200 characters.
@@ -192,7 +192,7 @@ function Account() {
                 <div className="flex justify-end">
                     <button
                         onClick={handleSaveChanges}
-                        className="bg-green-500 hover:bg-green-600 text-white font-medium px-6 py-2 rounded-lg transition-colors duration-200"
+                        className="btn-primary"
                     >
                         Save Changes
                     </button>

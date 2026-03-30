@@ -102,8 +102,8 @@ function AddEvent({ setShowAddEvent }) {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-        <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
+      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 sm:p-6">
+        <div className="bg-white rounded-xl p-6 mx-auto w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar">
           <h3 className="text-xl  mb-2">Add Event</h3>
           <p className="text-gray-600 mb-4 border-b pb-2 border-gray-300">
             Please fill in the details of your new event below.
@@ -115,8 +115,8 @@ function AddEvent({ setShowAddEvent }) {
               </span>
             )}
             {/* event Title */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="event-title" className="block ">
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="event-title" className="form-label">
                 Event Title
               </label>
               <input
@@ -127,13 +127,13 @@ function AddEvent({ setShowAddEvent }) {
                 onChange={onChangeInputHandler}
                 placeholder="Enter event Title..."
                 required
-                className="w-full mb-0 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input"
               />
             </div>
             {/* event start date and time */}
-            <div className="flex justify-between ">
-                <div className="startDate ">
-                    <label htmlFor="event-start-date" className="block ">
+            <div className="flex gap-4 mb-2">
+                <div className="flex-1 w-1/2">
+                    <label htmlFor="event-start-date" className="form-label">
                     Start Date
                     </label>
                     <input
@@ -143,11 +143,11 @@ function AddEvent({ setShowAddEvent }) {
                     value={eventForm.eventStartDate}
                     onChange={onChangeInputHandler}
                     required
-                    className="w-full mb-2 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="form-input"
                     />
                 </div>
-                <div className="start-time ">
-                    <label htmlFor="event-start-time" className="block ">
+                <div className="flex-1 w-1/2">
+                    <label htmlFor="event-start-time" className="form-label">
                     Start Time
                     </label>
                     <input
@@ -157,14 +157,14 @@ function AddEvent({ setShowAddEvent }) {
                     value={eventForm.eventStartTime}
                     onChange={onChangeInputHandler}
                     required
-                    className="w-full mb-2 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="form-input"
                     />
                  </div>        
             </div>
             {/* event end date and time */}
-            <div className="flex justify-between ">
-                <div className="endDate ">
-                    <label htmlFor="event-end-date" className="block ">
+            <div className="flex gap-4 mb-2">
+                <div className="flex-1 w-1/2">
+                    <label htmlFor="event-end-date" className="form-label">
                     End Date
                     </label>
                     <input
@@ -174,11 +174,11 @@ function AddEvent({ setShowAddEvent }) {
                     value={eventForm.eventEndDate}
                     onChange={onChangeInputHandler}
                     required
-                    className="w-full mb-2 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="form-input"
                     />
                 </div>
-                <div className="end-time ">
-                    <label htmlFor="event-end-time" className="block ">
+                <div className="flex-1 w-1/2">
+                    <label htmlFor="event-end-time" className="form-label">
                     End Time
                     </label>
                     <input
@@ -188,19 +188,19 @@ function AddEvent({ setShowAddEvent }) {
                     value={eventForm.eventEndTime}
                     onChange={onChangeInputHandler}
                     required
-                    className="w-full mb-2 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="form-input"
                     />
                  </div>        
             </div>
             {/* Category */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="event-category" className="block ">
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="event-category" className="form-label">
                 Category
               </label>
               <select
                 id="event-category"
                 name="eventCategory"
-                className="w-full mb-2 px-2 py-2 border overflow-y-scroll rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="form-input overflow-y-scroll"
                 value={eventForm.eventCategory}
                 onChange={onChangeInputHandler}
                 required
@@ -212,12 +212,11 @@ function AddEvent({ setShowAddEvent }) {
                 <option value="meeting">Meeting</option>
                 <option value="other">Other</option>
               </select>
-              
             </div>
                       
             {/* Location */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="event-location" className="block ">
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="event-location" className="form-label">
                 Location
               </label>
                 <input
@@ -227,13 +226,13 @@ function AddEvent({ setShowAddEvent }) {
                 value={eventForm.eventLocation}
                 onChange={onChangeInputHandler}
                 placeholder="Enter event location..."
-                className='w-full mb-2 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500'
+                className="form-input"
                 />
             </div>
             {/* Description */}
-            <div className="flex flex-col gap-1">
-              <label htmlFor="event-description" className="block ">
-                Description <span className='text-gray-600'>(optional)</span>
+            <div className="flex flex-col w-full mb-2">
+              <label htmlFor="event-description" className="form-label">
+                Description <span className="lowercase text-gray-400 opacity-70 ml-1 font-normal">(optional)</span>
               </label>
                 <textarea
                 id="event-description"
@@ -243,26 +242,25 @@ function AddEvent({ setShowAddEvent }) {
                 onChange={onChangeInputHandler}
                 name="eventDescription"
                 placeholder="Enter event description..."
-                className='w-full mb-2 px-2 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500'
+                className="form-input resize-none"
                 />
             </div>
             
             {/* Buttons */}
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-3 mt-4">
               <button
                 type="button"
                 onClick={() => setShowAddEvent(false)}
-                 className="px-4 py-2 rounded  text-gray-700 hover:bg-gray-200
-                        transition-colors duration-300 "
+                 className="btn-secondary px-5 py-2 text-sm"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 onClick={onSubmitAddEvent}
-                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg"
+                className="btn-primary px-5 py-2 text-sm"
               >
-                Add event
+                Add Event
               </button>
             </div>
           </form>

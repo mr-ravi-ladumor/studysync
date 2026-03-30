@@ -56,8 +56,8 @@ function AddTask({ setTasks, setShowAddTask }) {
     };
     return (
         <>
-            <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-                <div className="bg-white rounded-xl p-8 mx-auto w-full max-w-md ">
+            <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 sm:p-6">
+                <div className="bg-white rounded-xl p-6 mx-auto w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar">
                     <h3 className="text-xl font-medium mb-2">Add New Task</h3>
                     <p className="text-gray-600 mb-6 border-b pb-5 border-gray-300">
                         Please fill in the details of your new task below.
@@ -66,8 +66,8 @@ function AddTask({ setTasks, setShowAddTask }) {
                         className="flex flex-col gap-2"
                         onSubmit={onSubmitAddTask}
                     >
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="" className="block ">
+                        <div className="flex flex-col w-full mb-2">
+                            <label htmlFor="" className="form-label">
                                 Task Title
                             </label>
                             <input
@@ -79,11 +79,11 @@ function AddTask({ setTasks, setShowAddTask }) {
                                 }
                                 placeholder="Enter Task Title..."
                                 required
-                                className="w-full mb-3 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="form-input"
                             />
                         </div>
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="" className="">
+                        <div className="flex flex-col w-full mb-2">
+                            <label htmlFor="" className="form-label">
                                 Task Description
                             </label>
                             <textarea
@@ -97,12 +97,12 @@ function AddTask({ setTasks, setShowAddTask }) {
                                     })
                                 }
                                 placeholder="Enter Task Description..."
-                                className="w-full mb-4 px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 "
+                                className="form-input resize-none"
                             />
                         </div>
                         <div className="flex gap-4 mb-4">
                             <div className="flex-1">
-                                <label className="block text-sm mb-1">
+                                <label className="form-label">
                                     Due Date
                                 </label>
                                 <input
@@ -114,11 +114,11 @@ function AddTask({ setTasks, setShowAddTask }) {
                                             dueDate: e.target.value,
                                         })
                                     }
-                                    className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    className="form-input"
                                 />
                             </div>
                             <div className="w-40">
-                                <label className="block text-sm mb-1">
+                                <label className="form-label">
                                     Priority
                                 </label>
                                 <select
@@ -129,7 +129,7 @@ function AddTask({ setTasks, setShowAddTask }) {
                                             priority: e.target.value,
                                         })
                                     }
-                                    className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    className="form-input"
                                 >
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
@@ -137,28 +137,27 @@ function AddTask({ setTasks, setShowAddTask }) {
                                 </select>
                             </div>
                         </div>
-                        <div className="flex justify-end gap-2">
+                        <div className="flex justify-end gap-3 mt-4">
                             <button
                                 type="button"
                                 onClick={() => setShowAddTask(false)}
-                                className="px-4 py-2 rounded text-gray-700 hover:bg-gray-200
-                    transition-colors duration-300 "
+                                className="btn-secondary px-5 py-2 text-sm"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition-colors duration-300 shadow-lg disabled:opacity-50"
+                                className="btn-primary px-5 py-2 text-sm"
                             >
                                 {isLoading ? (
-                                    <div className="flex items-center gap-2">
+                                    <>
                                         <LoadingSpinner
                                             size="h-4 w-4"
                                             color="border-white"
                                         />
                                         Adding...
-                                    </div>
+                                    </>
                                 ) : (
                                     "Add Task"
                                 )}
