@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import UpdateTask from "./UpdateTask.jsx";
 import DeleteTask from "./DeleteTask.jsx";
+import delayOneSec from "../../utility/delay.js";
 
 function formatDueText(dueDateStr) {
     if (!dueDateStr) return "No due date";
@@ -99,6 +100,7 @@ function TaskList({ tasks, setTasks }) {
                     throw new Error("Failed to fetch tasks");
                 }
                 const allTasksData = await response.json();
+                await delayOneSec();
                 setTasks(allTasksData.data);
             } catch (error) {
                 // Ignore error locally if handled or toast.error

@@ -74,7 +74,7 @@ function ForgotPassword() {
             const data = await res.json();
             if (res.ok) {
                 navigate("/login");
-                // You could also show a success toast here
+                
             } else {
                 setError(data.message || "Failed to reset password.");
             }

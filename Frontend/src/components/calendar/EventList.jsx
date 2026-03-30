@@ -9,6 +9,7 @@ import {
 } from "date-fns";
 import EditEvent from "./EditEvent.jsx";
 import DeleteEvent from "./DeleteEvent.jsx";
+import delayOneSec from "../../utility/delay.js";
 
 const formatRange = (startDate, endDate) => {
     let formattedString = "";
@@ -63,6 +64,7 @@ const getRelativeDayLabel = (startDate) => {
 };
 
 function EventList({ calendarEvents, setCalendarEvents }) {
+    const [isLoading, setIsLoading] = useState(true);
     const themeForCategory = (cat) => {
         const c = (cat || "").toLowerCase();
         switch (c) {
@@ -121,10 +123,13 @@ function EventList({ calendarEvents, setCalendarEvents }) {
                     startDateTime: new Date(event.startDateTime),
                     endDateTime: new Date(event.endDateTime),
                 }));
+                await delayOneSec();
                 setCalendarEvents(transformedEvents);
                 // console.log("Events fetched successfully:", transformedEvents);
             } catch (error) {
                 console.error("Error fetching Events:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchCalendarEvents();
@@ -134,7 +139,34 @@ function EventList({ calendarEvents, setCalendarEvents }) {
         <div className="bg-white flex flex-col gap-4">
             <h3 className="text-xl font-semibold mb-2">Upcoming Events</h3>
 
-            {calendarEvents.length == 0 ? (
+            {isLoading ? (
+                <div className="flex flex-col gap-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="flex justify-between items-start rounded-lg border border-gray-100 px-4 py-4 animate-pulse shadow-sm"
+                        >
+                            <div className="flex items-start gap-4 w-full">
+                                <div className="h-10 w-10 rounded-lg bg-gray-200 shrink-0"></div>
+                                <div className="flex-1 space-y-4">
+                                    <div className="flex flex-col gap-2">
+                                        <div className="h-5 bg-gray-200 rounded w-1/3"></div>
+                                        <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                                    </div>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                        <div className="flex gap-2">
+                                            <div className="h-4 bg-gray-200 rounded w-14"></div>
+                                            <div className="h-4 bg-gray-200 rounded w-14"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="h-4 bg-gray-100 rounded-full w-16"></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : calendarEvents.length == 0 ? (
                 <div className="text-gray-500 text-center py-8">
                     No Eventds yet. Click ‘Add Event’ to get started!
                 </div>

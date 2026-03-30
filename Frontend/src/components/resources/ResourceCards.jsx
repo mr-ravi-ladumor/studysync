@@ -20,7 +20,7 @@ function returnFileSize(number) {
     return `${(number / 1e6).toFixed(1)} MB`;
 }
 
-function ResourceCards({ resources, onViewDetails, onEdit, onDelete }) {
+function ResourceCards({ resources, onViewDetails, onEdit, onDelete, isLoading }) {
     const themeForType = (type) => {
         switch ((type || "").toLowerCase()) {
             case "document":
@@ -75,7 +75,32 @@ function ResourceCards({ resources, onViewDetails, onEdit, onDelete }) {
         });
     return (
         <>
-            {resources.length === 0 ? (
+            {isLoading ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="bg-white rounded-xl px-3 py-3 animate-pulse border border-gray-100 shadow-sm">
+                        <div className="flex justify-between mb-2">
+                            <div className="flex items-center gap-3 w-full">
+                                <div className="w-10 h-10 rounded-lg bg-gray-200"></div>
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-5 bg-gray-200 rounded w-2/3"></div>
+                                    <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="h-px w-full bg-gray-100 my-4"></div>
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-2">
+                                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                <div className="flex gap-2">
+                                    <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                                    <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                                </div>
+                            </div>
+                            <div className="h-4 w-16 bg-gray-200 rounded"></div>
+                        </div>
+                    </div>
+                ))
+            ) : resources.length === 0 ? (
                 <div className="text-gray-500 text-center py-8 col-span-3">
                     No resources yet. Click ‘Add Resource’ to get started!
                 </div>

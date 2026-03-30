@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CircleCheck, Clock4, CalendarClock, Bookmark } from "lucide-react";
-import LoadingSpinner from "../utility/LoadingSpinner.jsx";
+import delayOneSec from "../../utility/delay.js";
 
 function StatusCards() {
     const [summary, setSummary] = useState({
@@ -26,6 +26,7 @@ function StatusCards() {
                 if (!res.ok) return;
                 const data = await res.json();
                 const d = data.data || {};
+                await delayOneSec();
                 setSummary((prev) => ({ ...prev, ...d }));
             } catch (e) {
                 // ignore

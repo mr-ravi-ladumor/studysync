@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import AddResource from "../components/resources/AddResource.jsx";
 import EditResource from "../components/resources/EditResource.jsx";
 import ViewResource from "../components/resources/ViewResource.jsx";
+import delayOneSec from "../utility/delay.js";
 
 const filterChips = [
     { label: "All Resources", value: "all" },
@@ -20,10 +21,11 @@ function Resources() {
     const [resources, setResources] = useState([]);
     const [activeFilter, setActiveFilter] = useState("all");
     const [viewing, setViewing] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch resources from the backend when the component mounts
         const fetchResources = async () => {
+            setIsLoading(true);
             try {
                 const response = await fetch(
                     `${import.meta.env.VITE_BACKEND_URL}/api/resources`,
@@ -33,14 +35,16 @@ function Resources() {
                     }
                 );
 
+                await delayOneSec();
                 const allResourcesData = await response.json();
                 if (!response.ok) {
                     throw new Error("Failed to fetch resources");
                 }
                 setResources(allResourcesData.data);
-                // console.log("Resources fetched successfully:",allResourcesData.data);
             } catch (error) {
                 console.error("Error fetching resources:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchResources();
@@ -145,6 +149,7 @@ function Resources() {
             </div>{" "}
             <div className="mt-4 cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <ResourceCards
+                    isLoading={isLoading}
                     resources={
                         activeFilter === "all"
                             ? resources
