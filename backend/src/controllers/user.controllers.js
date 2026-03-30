@@ -271,7 +271,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
     );
 })
 
-
 const verifyOTP = asyncHandler(async (req, res) => {
     const {email, otp} = req.body;
 
@@ -299,16 +298,20 @@ const verifyOTP = asyncHandler(async (req, res) => {
 })
 
 const resetPassword = asyncHandler(async (req, res) => {
-    const {email, newPassword} = req.body;
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp) {
+        throw new ApiError(400, "Email and OTP are required");
+    }
 
     if(!newPassword) {
         throw new ApiError(400, "New password is required");
     }
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
-    if(!user) {
-        throw new ApiError(404, "User with this email does not exist");
+    if (user.forgotPasswordOTP !== otp || user.forgotPasswordOTPExpiry < Date.now()) {
+        throw new ApiError(401, "Invalid or expired OTP");
     }
 
     user.password = newPassword;
@@ -317,10 +320,8 @@ const resetPassword = asyncHandler(async (req, res) => {
 
     await user.save();
 
-    res.status(200).json(
-        new ApiResponse(200, {}, "Password reset successfully")
-    );
-})
+    res.status(200).json(new ApiResponse(200, {}, "Password reset successfully"));
+});
 
 
 export {
@@ -332,4 +333,5 @@ export {
     deleteUser,
     forgotPassword,
     verifyOTP,
+    resetPassword
 };

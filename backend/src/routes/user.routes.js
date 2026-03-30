@@ -8,7 +8,8 @@ import {
     changePassword,
     deleteUser,
     forgotPassword,
-    verifyOTP
+    verifyOTP,
+    resetPassword,
  } from '../controllers/user.controllers.js';
 
 const router = Router();
@@ -22,5 +23,6 @@ router.route('/changePassword').put(verifyAuthToken, changePassword);
 router.route('/delete').delete(verifyAuthToken, deleteUser);
 router.route('/forgotPassword').post(forgotPassword);
 router.route('/verifyOTP').post(verifyOTP);
+router.route('/resetPassword').post(resetPassword);
 
 export default router;
