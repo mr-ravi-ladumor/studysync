@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, LogIn, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import LoadingSpinner from "../components/utility/LoadingSpinner.jsx";
 
@@ -21,12 +21,10 @@ function Login() {
 
         const validateData = () => {
             const { email, password } = formData;
-
             if (!email || !password) {
                 setError("Please fill in all required fields.");
                 return false;
             }
-
             if (password.length < 3) {
                 setError("Password must be at least 3 characters long.");
                 return false;
@@ -35,7 +33,6 @@ function Login() {
                 setError("Please enter a valid email address.");
                 return false;
             }
-
             return true;
         };
 
@@ -48,141 +45,138 @@ function Login() {
                 `${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
                 {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include", // Include cookies in the request
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
                     body: JSON.stringify(formData),
                 }
             );
-            
 
             if (response.ok) {
                 const userData = await response.json();
-                // console.log("Login successful:", userData.data.user);
                 login(userData.data.user);
-                setError("");
                 navigate("/dashboard");
             } else {
                 const errorData = await response.json();
-                // console.log("Login failed:", errorData);
-                if (errorData.message) {
-                    setError(errorData.message);
-                } else {
-                    setError("Login failed, please try again.");
-                }
+                setError(errorData.message || "Login failed, please try again.");
             }
         } catch (error) {
-            console.error("Login error:", error);
             setError("Connection error, please try again later.");
         } finally {
             setIsLoading(false);
-            setFormData({
-                email: "",
-                password: "",
-            });
         }
     };
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
     return (
-        <div className="min-h-screen  from-blue-50 bg-gradient-to-br to-green-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-2xl font-bold text-center mb-6">
-                    Login to StudySync
-                </h2>
-                {error && (
-                    <p className="text-red-500 text-center mb-4">{error}</p>
-                )}
-                {isLoading && (
-                    <div className="flex items-center justify-center gap-2 text-green-500 mb-4">
-                        <LoadingSpinner
-                            size="h-5 w-5"
-                            color="border-green-500"
+        <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
+            
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-green-50 rounded-full blur-[120px] opacity-60" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-gray-50 rounded-full blur-[100px] opacity-60" />
+
+            <div className="w-full max-w-[440px] z-10 transition-all duration-500">
+                <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-8 md:p-10 border border-gray-50">
+                    
+                   
+                    <div className="text-center mb-12">
+                         <img 
+                            src="/logo.svg" 
+                            alt="StudySync Logo" 
+                            className="w-20 h-20 mx-auto mb-6 transform -rotate-6 hover:rotate-0 transition-transform duration-300"
                         />
-                        <p>Logging in, please wait...</p>
+                        <h2 className="text-3xl font-extrabold text-[#111827] tracking-tight">Welcome Back</h2>
+                        <p className="text-gray-500 mt-3 font-medium">Continue your work with StudySync</p>
                     </div>
-                )}
-                <form className="space-y-6" onSubmit={onSubmitLogin}>
-                    <div>
-                        <label
-                            className="block text-sm font-medium text-gray-700 mb-1"
-                            htmlFor="email"
-                        >
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={formData.email}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    email: e.target.value,
-                                })
-                            }
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                            placeholder="Enter your email"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label
-                            className="block text-md font-medium text-gray-700 mb-1"
-                            htmlFor="password"
-                        >
-                            Password
-                        </label>
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                id="password"
-                                value={formData.password}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        password: e.target.value,
-                                    })
-                                }
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                placeholder="Enter your password"
-                                required
-                            />
+
+                   
+                    {error && (
+                        <div className="mb-8 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-2xl animate-in fade-in slide-in-from-top-2">
+                             <p className="text-red-700 text-sm font-semibold flex items-center gap-2">
+                                <span>{error}</span>
+                             </p>
+                        </div>
+                    )}
+
+                    <form className="space-y-6" onSubmit={onSubmitLogin}>
+                        {/* Email Input */}
+                        <div className="space-y-2">
+                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest ml-1" htmlFor="email">Email Address</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#22c55e] transition-colors">
+                                    <Mail size={18} />
+                                </div>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className="w-full pl-14 pr-5 py-4 bg-gray-50/50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-500/10 focus:border-[#22c55e] focus:bg-white transition-all duration-300 placeholder:text-gray-300"
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Password Input */}
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between ml-1">
+                                <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest" htmlFor="password">Password</label>
+                                <a href="#" className="text-xs font-bold text-[#22c55e] hover:opacity-80 transition-opacity">Forgot?</a>
+                            </div>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#22c55e] transition-colors">
+                                    <Lock size={18} />
+                                </div>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    className="w-full pl-14 pr-14 py-4 bg-gray-50/50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-500/10 focus:border-[#22c55e] focus:bg-white transition-all duration-300 placeholder:text-gray-300"
+                                    placeholder="••••••••"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-[#111827] transition-colors"
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Login Button */}
+                        <div className="pt-4">
                             <button
-                                type="button"
-                                onClick={togglePasswordVisibility}
-                                className="absolute text-gray-500 top-1/5 right-5 "
-                                tabIndex={-1}
+                                type="submit"
+                                disabled={isLoading}
+                                className="group relative w-full bg-[#22c55e] hover:bg-[#1fb355] text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-green-100 transition-all duration-300 active:scale-[0.98] disabled:opacity-70"
                             >
-                                {showPassword ? (
-                                    <EyeOff className="w-5 h-5" />
+                                {isLoading ? (
+                                    <div className="flex items-center justify-center gap-3">
+                                        <LoadingSpinner size="h-5 w-5" color="border-white" />
+                                        <span className="tracking-wide">Checking...</span>
+                                    </div>
                                 ) : (
-                                    <Eye className="w-5 h-5" />
+                                    <div className="flex items-center justify-center gap-2">
+                                        <span>Login In Now</span>
+                                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                    </div>
                                 )}
                             </button>
                         </div>
-                    </div>
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-green-500 text-white hover:bg-green-600 px-4 py-2 rounded-lg font-semibold transition-colors"
-                    >
-                        Login
-                    </button>
-                    <Link to="/signup">
-                        <p className="text-sm text-center text-gray-600 mt-4">
-                            Don't have an account?{" "}
-                            <span
-                                href="/signup"
-                                className="text-green-600 hover:underline"
-                            >
-                                Sign up
-                            </span>
+                    </form>
+
+                    {/* Footer Links */}
+                    <div className="mt-12 text-center">
+                        <p className="text-gray-400 font-medium">
+                            Don't have an account yet?
                         </p>
-                    </Link>
-                </form>
+                        <Link to="/signup" className="mt-2 inline-block text-[#111827] font-extrabold text-sm hover:text-[#22c55e] transition-colors uppercase tracking-widest border-b-2 border-green-100">
+                            Create Account
+                        </Link>
+                    </div>
+                </div>
             </div>
         </div>
     );
