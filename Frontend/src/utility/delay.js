@@ -1,3 +1,3 @@
-const delayOneSec = () => new Promise((resolve) => setTimeout(resolve, 5000));
+const delayOneSec = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
 export default delayOneSec;
