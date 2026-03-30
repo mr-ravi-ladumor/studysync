@@ -6,7 +6,9 @@ import {
     userLogout,
     updateUserData,
     changePassword,
-    deleteUser
+    deleteUser,
+    forgotPassword,
+    verifyOTP
  } from '../controllers/user.controllers.js';
 
 const router = Router();
@@ -18,5 +20,7 @@ router.route('/logout').post(verifyAuthToken, userLogout);
 router.route('/update').put(verifyAuthToken, updateUserData);
 router.route('/changePassword').put(verifyAuthToken, changePassword);
 router.route('/delete').delete(verifyAuthToken, deleteUser);
+router.route('/forgotPassword').post(forgotPassword);
+router.route('/verifyOTP').post(verifyOTP);
 
 export default router;

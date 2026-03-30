@@ -272,6 +272,57 @@ const forgotPassword = asyncHandler(async (req, res) => {
 })
 
 
+const verifyOTP = asyncHandler(async (req, res) => {
+    const {email, otp} = req.body;
+
+    if(!email || !otp) {
+        throw new ApiError(400, "Email and OTP are required");
+    }
+
+    const user = await User.findOne({email});
+
+    if(!user) {
+        throw new ApiError(404, "User with this email does not exist");
+    }
+
+    if(user.forgotPasswordOTP !== otp) {
+        throw new ApiError(401, "Invalid OTP");
+    }
+
+    if(user.forgotPasswordOTPExpiry < Date.now()) {
+        throw new ApiError(401, "OTP has expired");
+    }
+
+    res.status(200).json(
+        new ApiResponse(200, {}, "OTP verified successfully")
+    );
+})
+
+const resetPassword = asyncHandler(async (req, res) => {
+    const {email, newPassword} = req.body;
+
+    if(!newPassword) {
+        throw new ApiError(400, "New password is required");
+    }
+
+    const user = await User.findOne({email});
+
+    if(!user) {
+        throw new ApiError(404, "User with this email does not exist");
+    }
+
+    user.password = newPassword;
+    user.forgotPasswordOTP = undefined;
+    user.forgotPasswordOTPExpiry = undefined;
+
+    await user.save();
+
+    res.status(200).json(
+        new ApiResponse(200, {}, "Password reset successfully")
+    );
+})
+
+
 export {
     userRegister,
     userLogin,
@@ -280,4 +331,5 @@ export {
     changePassword,
     deleteUser,
     forgotPassword,
+    verifyOTP,
 };
